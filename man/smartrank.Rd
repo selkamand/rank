@@ -4,7 +4,14 @@
 \alias{smartrank}
 \title{Rank a vector based on either alphabetical or frequency order}
 \usage{
-smartrank(x, sort_by = c("alphabetical", "frequency"), desc = FALSE)
+smartrank(
+  x,
+  sort_by = c("alphabetical", "frequency"),
+  desc = FALSE,
+  ties.method = "average",
+  na.last = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{x}{A numeric, character, or factor vector}
@@ -13,6 +20,16 @@ smartrank(x, sort_by = c("alphabetical", "frequency"), desc = FALSE)
 
 \item{desc}{A logical indicating whether the ranking should be in descending ( TRUE ) or ascending ( FALSE ) order.
 When input is numeric, ranking is always based on numeric order.}
+
+\item{ties.method}{a character string specifying how ties are treated,
+    see \sQuote{Details}; can be abbreviated.}
+
+\item{na.last}{a logical or character string controlling the treatment
+    of \code{\link[base]{NA}}s. If \code{TRUE}, missing values in the data are
+    put last; if \code{FALSE}, they are put first; if \code{NA}, they
+    are removed; if \code{"keep"} they are kept with rank \code{NA}.}
+
+\item{verbose}{verbose (flag)}
 }
 \value{
 The ranked vector
@@ -23,6 +40,11 @@ This function acts as a drop-in replacement for the base \code{rank()} function 
 \item Rank categorical factors based on frequency instead of alphabetically
 \item Rank in descending or ascending order
 }
+}
+\note{
+When \code{sort_by = "frequency"}, ties based on frequency are broken by alphabetical order of the terms
+
+When \code{sort_by = "frequency"} and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 }
 \examples{
 smartrank(c("apple","banana","banana","orange","apple"))
