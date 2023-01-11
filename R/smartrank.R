@@ -16,7 +16,7 @@
 smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE, ties.method = "average") {
 
   # Assertions --------------------------------------------------------------
-  if(sort_by == c("alphabetical", "frequency")) sort_by <- "alphabetical"
+  if(all(sort_by == c("alphabetical", "frequency"))) sort_by <- "alphabetical"
   if(!(is.character(sort_by) && length(sort_by) == 1)) stop("sort_by must be one of 'alphabetical' or 'frequency'")
   if(!sort_by %in% c('alphabetical', 'frequency')) stop("sort_by must be one of 'alphabetical' or 'frequency'")
 
