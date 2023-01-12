@@ -1,5 +1,5 @@
 Package: rank
-Title: Flexible Ranking of Elements in Vectors
+Title: Flexible Sample Ranks
 Version: 0.0.0.9000
 Authors@R: 
     person("Sam", "El-Kamand", , "selkamand@gmail.com", role = c("aut", "cre", "cph"),
