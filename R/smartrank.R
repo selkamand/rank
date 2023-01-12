@@ -15,8 +15,39 @@
 #'
 #' @return The ranked vector
 #' @examples
-#' smartrank(c("apple","banana","banana","orange","apple"))
-#' smartrank(c("apple","banana","banana","orange","apple"),sort_by = "frequency")
+#'
+#' ## CATEGORICAL INPUT -----------------------
+#' fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
+#'
+#' # rank alphabetically
+#' smartrank(fruits)
+#' #> [1] 1.5 3.5 1.5 5.0 3.5
+#'
+#' # rank based on frequency
+#' smartrank(fruits, sort_by = "frequency")
+#' #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
+#' #> [1] 2 3 2 1 3
+#'
+#' # rank based on descending order of frequency
+#' smartrank(fruits,sort_by = "frequency", desc = TRUE)
+#' #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
+#' #> [1] 1 2 1 3 2
+#'
+#'
+#' ## NUMERICAL INPUT -----------------------
+#'
+#' # rank numerically
+#' smartrank(c(1, 3, 2))
+#' #> [1] 1 3 2
+#'
+#' # rank numerically based on descending order
+#' smartrank(c(1, 3, 2), desc = TRUE)
+#' #> [1] 3 1 2
+#'
+#' # always rank numerically, irrespective of sort_by
+#' smartrank(c(1, 3, 2), sort_by = "frequency")
+#' #> smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically
+#' #> [1] 1 3 2
 #' @export
 smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE, ties.method = "average",  na.last = TRUE, verbose = TRUE) {
 
