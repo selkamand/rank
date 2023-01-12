@@ -9,6 +9,9 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/package=rank)
+[![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
 <!-- badges: end -->
 
 Rank provides a customizable alternative to the built-in `rank()`
@@ -40,14 +43,16 @@ fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 
 # rank alphabetically
 smartrank(fruits)
-#> [1] 1 3 1 5 3
+#> [1] 1.5 3.5 1.5 5.0 3.5
 
 # rank based on frequency
 smartrank(fruits, sort_by = "frequency")
+#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #> [1] 2 3 2 1 3
 
 # rank based on descending order of frequency
 smartrank(fruits,sort_by = "frequency", desc = TRUE)
+#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #> [1] 1 2 1 3 2
 
 
@@ -63,5 +68,6 @@ smartrank(c(1, 3, 2), desc = TRUE)
 
 # always rank numerically, irrespective of sort_by
 smartrank(c(1, 3, 2), sort_by = "frequency")
+#> smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically
 #> [1] 1 3 2
 ```

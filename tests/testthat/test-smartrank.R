@@ -74,14 +74,38 @@ test_that("'na.last' works as expected for categorical variables", {
   # Check the ranking when na.last is set to FALSE and sort_by is set to "frequency"
   expect_equal(smartrank(x, sort_by = "frequency", na.last = FALSE, verbose = FALSE), c(4, 1, 5, 2, 3, 4, 5))
 
+  # NAs are dropped if na.last = NA
+  expect_equal(smartrank(x, sort_by = "alphabetical", na.last = NA, verbose = FALSE), rank(x, na.last = NA))
+  expect_equal(smartrank(x, sort_by = "frequency", na.last = NA, verbose = FALSE), c(2, 3, 1, 2, 3))
 
   # What about when input vec is all NAs
   x <- c(NA, NA, NA)
   expect_equal(smartrank(x, sort_by = "frequency", na.last = TRUE, verbose = FALSE), c(1, 2, 3))
   expect_equal(smartrank(x, sort_by = "frequency", na.last = FALSE, verbose = FALSE), c(1, 2, 3))
   expect_equal(smartrank(x, sort_by = "alphabetical", na.last = TRUE, verbose = FALSE), c(1, 2, 3))
-  expect_equal(smartrank(x, sort_by = "alphabetical", na.last = FALSE, verbose = FALSE), c(1, 2, 3))
-
+  expect_equal(smartrank(x, sort_by = "alphabetical", na.last = NA, verbose = FALSE), rank(x, na.last = NA))
+  expect_equal(smartrank(x, sort_by = "frequency", na.last = NA, verbose = FALSE), numeric(0))
 })
 
 
+test_that("smartrank function throws appropriate errors when incorrect parameter types are supplied", {
+  x <- c(1, 2, 3)
+
+  expect_error(smartrank(x, sort_by = "abc"), "sort_by must be one of 'alphabetical' or 'frequency'")
+  expect_error(smartrank(x, ties.method = "abc"), 'ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
+  expect_error(smartrank(x, na.last = "abc"), "na.last must be TRUE/FALSE")
+  expect_error(smartrank(x, verbose = NA), "verbose must be TRUE/FALSE")
+})
+
+test_that("verbose flag works as expected", {
+  # Test numeric input
+  x <- c(1, 2, 3)
+  expect_message(smartrank(x, sort_by = "frequency", verbose = TRUE), "smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically\n")
+  expect_message(smartrank(x, sort_by = "frequency", verbose = FALSE), NA)
+
+  # Test categorical input
+  x <- c("a", "b", "c", "a", "b")
+  expect_message(smartrank(x, sort_by = "frequency", verbose = TRUE), "smartrank: Sorting a categorical variable by frequency: ignoring ties.method\n")
+  expect_message(smartrank(x, sort_by = "frequency", verbose = FALSE), NA)
+
+})
