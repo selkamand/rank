@@ -100,7 +100,7 @@ test_that("smartrank function throws appropriate errors when incorrect parameter
 test_that("verbose flag works as expected", {
   # Test numeric input
   x <- c(1, 2, 3)
-  expect_message(smartrank(x, sort_by = "frequency", verbose = TRUE), "smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically\n")
+  expect_message(smartrank(x, sort_by = "frequency", verbose = TRUE), "smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically\n")
   expect_message(smartrank(x, sort_by = "frequency", verbose = FALSE), NA)
 
   # Test categorical input

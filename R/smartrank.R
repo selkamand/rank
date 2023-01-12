@@ -60,18 +60,9 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
   if(! ties.method %in% c( "average", "first", "last", "random", "max", "min")) stop('ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
 
 
-  # Numeric Input -----------------------------------------------------------------
-  if (is.numeric(x)) {
-    if(verbose & sort_by == "frequency") { message("smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically") }
-    if(desc)
-      ranking <- rank(-x, na.last = na.last, ties.method = ties.method)
-    else
-      ranking <- rank(x, na.last = na.last, ties.method = ties.method)
-    return(ranking)
-  }
 
   # Categorical Input -------------------------------------------------------
-  else if (is.character(x) || is.factor(x) || is.logical(x)) {
+  if (is.character(x) || is.factor(x) || is.logical(x)) {
     if (sort_by == "alphabetical") {
       return(rank(x, na.last=na.last, ties.method = ties.method))
     } else if (sort_by == "frequency") {
@@ -125,7 +116,12 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
       stop("Author has forgotten to code a response when sort_by == {sort_by}")
   }
   else {
-    stop("Input must be a numeric, character, or factor vector.")
+    if(verbose & sort_by == "frequency") { message("smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically") }
+    if(desc)
+      ranking <- rank(-x, na.last = na.last, ties.method = ties.method)
+    else
+      ranking <- rank(x, na.last = na.last, ties.method = ties.method)
+    return(ranking)
   }
 }
 
