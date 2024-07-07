@@ -31,6 +31,13 @@ Rank provides a customizable alternative to the built-in `rank()` function. The 
 
 ## Installation
 
+
+To install **rank** from CRAN run:
+
+```r
+install.packages("rank")
+```
+
 You can install the development version of rank like so:
 
 ``` r
@@ -39,7 +46,6 @@ remotes::install_github("selkamand/rank")
 ```
 
 ## Usage
-
 
 ```{r example}
 library(rank)
