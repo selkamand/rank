@@ -25,6 +25,12 @@ function. The package offers the following features:
 
 ## Installation
 
+To install **rank** from CRAN run:
+
+``` r
+install.packages("rank")
+```
+
 You can install the development version of rank like so:
 
 ``` r
@@ -44,16 +50,25 @@ fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 # rank alphabetically
 smartrank(fruits)
 #> [1] 1.5 3.5 1.5 5.0 3.5
+```
+
+``` r
 
 # rank based on frequency
 smartrank(fruits, sort_by = "frequency")
 #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #> [1] 2 3 2 1 3
+```
+
+``` r
 
 # rank based on descending order of frequency
 smartrank(fruits,sort_by = "frequency", desc = TRUE)
 #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #> [1] 1 2 1 3 2
+```
+
+``` r
 
 
 ## NUMERICAL INPUT -----------------------
@@ -61,13 +76,19 @@ smartrank(fruits,sort_by = "frequency", desc = TRUE)
 # rank numerically
 smartrank(c(1, 3, 2))
 #> [1] 1 3 2
+```
+
+``` r
 
 # rank numerically based on descending order
 smartrank(c(1, 3, 2), desc = TRUE)
 #> [1] 3 1 2
+```
+
+``` r
 
 # always rank numerically, irrespective of sort_by
 smartrank(c(1, 3, 2), sort_by = "frequency")
-#> smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically
+#> smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically
 #> [1] 1 3 2
 ```
