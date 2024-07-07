@@ -1,5 +1,5 @@
 Package: rank
-Title: Flexible and Customizable Ranking Functions
+Title: Customisable Ranking of Numerical and Categorical Data
 Version: 0.0.0.9000
 Authors@R: 
     person("Sam", "El-Kamand", , "sam.elkamand@gmail.com", role = c("aut", "cre", "cph"),
