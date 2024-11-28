@@ -47,21 +47,17 @@ library(rank)
 
 fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 
-## CATEGORICAL INPUT -----------------------
-
 # rank alphabetically
 smartrank(fruits)
 #> [1] 1.5 3.5 1.5 5.0 3.5
 
 # rank based on frequency
 smartrank(fruits, sort_by = "frequency")
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
-#> [1] 2 3 2 1 3
+#> [1] 2.5 4.5 2.5 1.0 4.5
 
 # rank based on descending order of frequency
-smartrank(fruits,sort_by = "frequency", desc = TRUE)
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
-#> [1] 1 2 1 3 2
+smartrank(fruits, sort_by = "frequency", desc = TRUE)
+#> [1] 1.5 3.5 1.5 5.0 3.5
 ```
 
 ### Numeric Input
@@ -84,7 +80,6 @@ can sort the `fruits` vector based on the frequency of each element.
 ``` r
 fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 ranks <- smartrank(fruits, sort_by = "frequency")
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
 ```
@@ -109,7 +104,6 @@ data = data.frame(
 
 # Rank fruits so the most frequently picked fruits will come first
 fruit_ranks <- smartrank(data$fruits, sort_by = "frequency", desc=TRUE) 
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 
 # Rank pickers in alphabetical order
 picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE) 
@@ -145,7 +139,6 @@ arrange(
   smartrank(fruits, "frequency", desc = TRUE), 
   smartrank(picker, "alphabetical", desc = FALSE)
 )
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #>   fruits    picker
 #> 1  Apple       Bob
 #> 2  Apple Elizabeth
