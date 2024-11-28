@@ -1,55 +1,33 @@
 ---
-output: github_document
+title: "Using smartrank"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using smartrank}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment = "#>"
 )
 ```
 
-# rank
-
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/package=rank)
-[![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
-<!-- badges: end -->
+```{r setup}
+library(rank)
+```
 
 Rank provides a customizable alternative to the built-in `rank()` function. The package offers the following features:
 
   1. **Frequency-based ranking of categorical variables**: choose whether to rank based on alphabetic order or element frequency.
   
   2. **Control over sorting order**: Use `desc=TRUE` to rank based on descending or ascending order.
+  
 
-## Installation
+### Ranking categorical vectors
 
-
-To install **rank** from CRAN run:
-
-```r
-install.packages("rank")
-```
-
-You can install the development version of rank like so:
-
-``` r
-# install.packages('remotes')
-remotes::install_github("selkamand/rank")
-```
-
-## Usage
-
-### Categorical Input
-```{r example}
-library(rank)
-
+```{r}
 fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 
 # rank alphabetically
@@ -60,11 +38,10 @@ smartrank(fruits, sort_by = "frequency")
 
 # rank based on descending order of frequency
 smartrank(fruits,sort_by = "frequency", desc = TRUE)
-
 ```
 
 
-### Numeric Input
+### Ranking numeric vectors 
 
 ```{r}
 # rank numerically
@@ -74,7 +51,7 @@ smartrank(c(1, 3, 2))
 smartrank(c(1, 3, 2), desc = TRUE)
 ```
 
-### Sorting By Rank
+### Sorting vectors by rank
 
 We can use `order` to sort vectors based on their ranks. For example, we can sort the `fruits` vector based on the frequency of each element.
 
@@ -84,7 +61,7 @@ ranks <- smartrank(fruits, sort_by = "frequency")
 fruits[order(ranks)]
 ```
 
-### Data-frames
+### Sorting Data-frames
 
 `smartrank` can be used to arrange data.frames based on one or more columns, while maintaining complete control over how each column contributes to the final row order.
 
@@ -100,6 +77,7 @@ data = data.frame(
 
 # Rank fruits so the most frequently picked fruits will come first
 fruit_ranks <- smartrank(data$fruits, sort_by = "frequency", desc=TRUE) 
+
 
 # Rank pickers in alphabetical order
 picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE) 
@@ -122,4 +100,3 @@ arrange(
   smartrank(picker, "alphabetical", desc = FALSE)
 )
 ```
-
