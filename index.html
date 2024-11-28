@@ -32,6 +32,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/smartrank.html">Using smartrank</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -70,6 +76,9 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<div class="section level3">
+<h3 id="categorical-input">Categorical Input<a class="anchor" aria-label="anchor" href="#categorical-input"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/selkamand/rank" class="external-link">rank</a></span><span class="op">)</span></span>
 <span></span>
@@ -79,38 +88,100 @@
 <span></span>
 <span><span class="co"># rank alphabetically</span></span>
 <span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.5 3.5 1.5 5.0 3.5</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] 1.5 3.5 1.5 5.0 3.5</span></span>
+<span></span>
 <span><span class="co"># rank based on frequency</span></span>
 <span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span>
-<span><span class="co">#&gt; [1] 2 3 2 1 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] 2 3 2 1 3</span></span>
+<span></span>
 <span><span class="co"># rank based on descending order of frequency</span></span>
 <span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span>,sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span>
 <span><span class="co">#&gt; [1] 1 2 1 3 2</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span></span>
-<span><span class="co">## NUMERICAL INPUT -----------------------</span></span>
-<span></span>
-<span><span class="co"># rank numerically</span></span>
+</div>
+<div class="section level3">
+<h3 id="numeric-input">Numeric Input<a class="anchor" aria-label="anchor" href="#numeric-input"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># rank numerically</span></span>
 <span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1 3 2</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] 1 3 2</span></span>
+<span></span>
 <span><span class="co"># rank numerically based on descending order</span></span>
 <span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3 1 2</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># always rank numerically, irrespective of sort_by</span></span>
-<span><span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically</span></span>
-<span><span class="co">#&gt; [1] 1 3 2</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="sorting-by-rank">Sorting By Rank<a class="anchor" aria-label="anchor" href="#sorting-by-rank"></a>
+</h3>
+<p>We can use <code>order</code> to sort vectors based on their ranks. For example, we can sort the <code>fruits</code> vector based on the frequency of each element.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fruits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Apple"</span>, <span class="st">"Orange"</span>, <span class="st">"Apple"</span>, <span class="st">"Pear"</span>, <span class="st">"Orange"</span><span class="op">)</span></span>
+<span><span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span>
+<span><span class="va">fruits</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="data-frames">Data-frames<a class="anchor" aria-label="anchor" href="#data-frames"></a>
+</h3>
+<p><code>smartrank</code> can be used to arrange data.frames based on one or more columns, while maintaining complete control over how each column contributes to the final row order.</p>
+<div class="section level4">
+<h4 id="baser">BaseR<a class="anchor" aria-label="anchor" href="#baser"></a>
+</h4>
+<p>For example, we can sort the following dataframe based on frequency of fruits, but break any ties based on the alphabetical order of the picker.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    fruits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Apple"</span>, <span class="st">"Orange"</span>, <span class="st">"Apple"</span>, <span class="st">"Pear"</span>, <span class="st">"Orange"</span><span class="op">)</span>,</span>
+<span>    picker <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Elizabeth"</span>, <span class="st">"Damian"</span>,  <span class="st">"Bob"</span>, <span class="st">"Cameron"</span>, <span class="st">"Alice"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Rank fruits so the most frequently picked fruits will come first</span></span>
+<span><span class="va">fruit_ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">fruits</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span>
+<span></span>
+<span><span class="co"># Rank pickers in alphabetical order</span></span>
+<span><span class="va">picker_ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">picker</span>, sort_by <span class="op">=</span> <span class="st">"alphabetical"</span>, desc<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)</span></span>
+<span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">fruit_ranks</span>, <span class="va">picker_ranks</span><span class="op">)</span>,<span class="op">]</span></span>
+<span><span class="co">#&gt;   fruits    picker</span></span>
+<span><span class="co">#&gt; 3  Apple       Bob</span></span>
+<span><span class="co">#&gt; 1  Apple Elizabeth</span></span>
+<span><span class="co">#&gt; 5 Orange     Alice</span></span>
+<span><span class="co">#&gt; 2 Orange    Damian</span></span>
+<span><span class="co">#&gt; 4   Pear   Cameron</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="tidyverse-integration">Tidyverse Integration<a class="anchor" aria-label="anchor" href="#tidyverse-integration"></a>
+</h4>
+<p>An equivalent way to hierarchically sort data.frames is to use <code><a href="reference/smartrank.html">smartrank()</a></code> in the tidyverse <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> function</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>, </span>
+<span>  <span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span>, <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">picker</span>, <span class="st">"alphabetical"</span>, desc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span>
+<span><span class="co">#&gt;   fruits    picker</span></span>
+<span><span class="co">#&gt; 1  Apple       Bob</span></span>
+<span><span class="co">#&gt; 2  Apple Elizabeth</span></span>
+<span><span class="co">#&gt; 3 Orange     Alice</span></span>
+<span><span class="co">#&gt; 4 Orange    Damian</span></span>
+<span><span class="co">#&gt; 5   Pear   Cameron</span></span></code></pre></div>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

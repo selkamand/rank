@@ -24,6 +24,10 @@ Rank in descending or ascending order
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/smartrank.html">Using smartrank</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -96,6 +100,17 @@ When input is numeric, ranking is always based on numeric order.</p></dd>
     <p>The ranked vector</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>If <code>x</code> includes ‘ties’ (equal values), the <code>ties.method</code> argument determines how the rank value is decided. Must be one of:</p><ul><li><p><strong>average</strong>: replaces integer ranks of tied values with their average  (default)</p></li>
+<li><p><strong>first</strong>: first-occurring value is assumed to be the lower rank (closer to one)</p></li>
+<li><p><strong>last</strong>: last-occurring value is assumed to be the lower rank (closer to one)</p></li>
+<li><p><strong>max</strong> or <strong>min</strong>: integer ranks of tied values are replaced with their maximum and minimum respectively (latter is typical in sports-ranking)</p></li>
+<li><p><strong>random</strong> which of the tied values are higher / lower rank is randomly decided.</p></li>
+</ul><p>NA values are never considered to be equal:
+for na.last = TRUE and na.last = FALSE
+they are given distinct ranks in the order in which they occur in x.</p>
+    </div>
+    <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>When <code>sort_by = "frequency"</code>, ties based on frequency are broken by alphabetical order of the terms</p>
 <p>When <code>sort_by = "frequency"</code> and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates</p>
@@ -104,7 +119,9 @@ When input is numeric, ranking is always based on numeric order.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## CATEGORICAL INPUT -----------------------</span></span></span>
+<span class="r-in"><span><span class="co"># ------------------</span></span></span>
+<span class="r-in"><span><span class="co">## CATEGORICAL INPUT</span></span></span>
+<span class="r-in"><span><span class="co"># ------------------</span></span></span>
 <span class="r-in"><span><span class="va">fruits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Apple"</span>, <span class="st">"Orange"</span>, <span class="st">"Apple"</span>, <span class="st">"Pear"</span>, <span class="st">"Orange"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># rank alphabetically</span></span></span>
@@ -126,9 +143,16 @@ When input is numeric, ranking is always based on numeric order.</p></dd>
 <span class="r-in"><span><span class="co">#&gt; smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span></span></span>
 <span class="r-in"><span><span class="co">#&gt; [1] 1 2 1 3 2</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Sort fruits vector based on rank</span></span></span>
+<span class="r-in"><span><span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu">smartrank</span><span class="op">(</span><span class="va">fruits</span>,sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> smartrank: Sorting a categorical variable by frequency: ignoring ties.method</span>
+<span class="r-in"><span><span class="va">fruits</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"  </span>
+<span class="r-in"><span><span class="co">#&gt; [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## NUMERICAL INPUT -----------------------</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ------------------</span></span></span>
+<span class="r-in"><span><span class="co">## NUMERICAL INPUT</span></span></span>
+<span class="r-in"><span><span class="co"># ------------------</span></span></span>
 <span class="r-in"><span><span class="co"># rank numerically</span></span></span>
 <span class="r-in"><span><span class="fu">smartrank</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 3 2</span>
