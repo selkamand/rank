@@ -174,3 +174,68 @@ test_that("smartrank handles ties.method = 'max'", {
   expect_equal(smartrank(x, ties.method = "max"), c(4, 2, 4, 2))
 })
 
+test_that("smartrank function throws an error when sort_by is not a character vector of length 1", {
+  expect_error(smartrank(1:3, sort_by = NULL), "sort_by must be one of 'alphabetical' or 'frequency'")
+  expect_error(smartrank(1:3, sort_by = 1), "sort_by must be one of 'alphabetical' or 'frequency'")
+  expect_error(smartrank(1:3, sort_by = TRUE), "sort_by must be one of 'alphabetical' or 'frequency'")
+})
+
+test_that("smartrank correctly ranks when desc == TRUE and sort_by == 'frequency'", {
+  x <- c("apple", "banana", "apple", "cherry", "banana", "banana")
+
+  result <- smartrank(x, sort_by = "frequency", desc = TRUE, verbose = FALSE)
+
+  expect_equal(result, c(4.5, 2, 4.5, 6, 2, 2))
+})
+
+test_that("smartrank function throws an error when na.last or verbose are not logical values", {
+  x <- c(1, 2, 3)
+
+  expect_error(smartrank(x, na.last = NULL), "na.last must be TRUE/FALSE")
+  expect_error(smartrank(x, na.last = 1), "na.last must be TRUE/FALSE")
+
+  expect_error(smartrank(x, verbose = NULL), "verbose must be TRUE/FALSE")
+  expect_error(smartrank(x, verbose = 1), "verbose must be TRUE/FALSE")
+})
+
+test_that("smartrank works with logical vectors", {
+  x <- c(TRUE, FALSE, TRUE, FALSE, NA)
+
+  # When sort_by == "alphabetical", desc == FALSE
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = FALSE, verbose = FALSE), rank(x))
+
+  # When sort_by == "alphabetical", desc == TRUE
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = TRUE, verbose = FALSE), rank(!x, na.last = TRUE, ties.method = "average"))
+
+  # When sort_by == "frequency", desc == FALSE
+  # Frequencies: TRUE (2), FALSE (2)
+  # Since frequencies are equal, alphabetical order is used: FALSE, TRUE
+  expected <- c(3.5, 1.5, 3.5, 1.5, 5)
+  result <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
+  expect_equal(result, expected)
+
+  # When sort_by == "frequency", desc == TRUE
+  expected <- c(3.5, 1.5, 3.5, 1.5, 5)
+  result <- smartrank(x, sort_by = "frequency", desc = TRUE, verbose = FALSE)
+  expect_equal(result, expected)
+
+})
+
+test_that("smartrank works with factor vectors", {
+  x <- factor(c("a", "c", "b", "a", "b", "c", NA))
+
+  # When sort_by == "alphabetical", desc == FALSE
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = FALSE, verbose = FALSE), rank(x))
+
+  # When sort_by == "alphabetical", desc == TRUE
+  expected <- c(5.5, 1.5, 3.5, 5.5, 3.5, 1.5, 7)
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = TRUE, verbose = FALSE, na.last = TRUE), expected)
+
+  # When sort_by == "frequency", desc == FALSE
+  # Frequencies: "a" (2), "b" (2), "c" (2)
+  # Since frequencies are equal, alphabetical order is used: "a", "b", "c"
+  result <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
+  expect_equal(result, c(1.5, 5.5, 3.5, 1.5, 3.5, 5.5, 7))
+})
+
+

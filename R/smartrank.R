@@ -74,12 +74,12 @@
 smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE, ties.method = "average",  na.last = TRUE, verbose = TRUE) {
 
   # Assertions --------------------------------------------------------------
-  if(all(sort_by == c("alphabetical", "frequency"))) sort_by <- "alphabetical"
+  if(identical(sort_by, c("alphabetical", "frequency"))) sort_by <- "alphabetical"
   if(!(is.character(sort_by) && length(sort_by) == 1)) stop("sort_by must be one of 'alphabetical' or 'frequency'")
   if(!sort_by %in% c('alphabetical', 'frequency')) stop("sort_by must be one of 'alphabetical' or 'frequency'")
   if(!(!is.null(na.last) & is.logical(na.last))) stop("na.last must be TRUE/FALSE")
-  if(!(!is.null(verbose) & !is.na(verbose) & is.logical(verbose))) stop("verbose must be TRUE/FALSE")
-  if(! ties.method %in% c( "average", "first", "last", "random", "max", "min")) stop('ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
+  if(!(!is.null(verbose) && !is.na(verbose) && is.logical(verbose))) stop("verbose must be TRUE/FALSE")
+  if(length(ties.method) > 1 || ! ties.method %in% c( "average", "first", "last", "random", "max", "min")) stop('ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
 
 
 
