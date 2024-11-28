@@ -65,6 +65,7 @@ When \code{sort_by = "frequency"} and input is character, ties.method is ignored
 # ------------------
 ## CATEGORICAL INPUT
 # ------------------
+
 fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 
 # rank alphabetically
@@ -73,22 +74,22 @@ smartrank(fruits)
 
 # rank based on frequency
 smartrank(fruits, sort_by = "frequency")
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
-#> [1] 2 3 2 1 3
+#> [1] 2.5 4.5 2.5 1.0 4.5
 
 # rank based on descending order of frequency
-smartrank(fruits,sort_by = "frequency", desc = TRUE)
-#> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
-#> [1] 1 2 1 3 2
+smartrank(fruits, sort_by = "frequency", desc = TRUE)
+#> [1] 1.5 3.5 1.5 5.0 3.5
 
-# Sort fruits vector based on rank
+# sort fruits vector based on rank
 ranks <- smartrank(fruits,sort_by = "frequency", desc = TRUE)
 fruits[order(ranks)]
 #> [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"
 
+
 # ------------------
 ## NUMERICAL INPUT
 # ------------------
+
 # rank numerically
 smartrank(c(1, 3, 2))
 #> [1] 1 3 2
@@ -97,8 +98,8 @@ smartrank(c(1, 3, 2))
 smartrank(c(1, 3, 2), desc = TRUE)
 #> [1] 3 1 2
 
-# always rank numerically, irrespective of sort_by
+# always rank numeric vectors based on values, irrespective of sort_by
 smartrank(c(1, 3, 2), sort_by = "frequency")
-#> smartrank: Sorting a numeric variable. Ignoring `sort_by` and sorting numerically
+#> smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically
 #> [1] 1 3 2
 }

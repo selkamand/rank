@@ -37,7 +37,7 @@ smartrank(fruits)
 smartrank(fruits, sort_by = "frequency")
 
 # rank based on descending order of frequency
-smartrank(fruits,sort_by = "frequency", desc = TRUE)
+smartrank(fruits, sort_by = "frequency", desc = TRUE)
 ```
 
 
@@ -89,7 +89,7 @@ data[order(fruit_ranks, picker_ranks),]
 
 #### Tidyverse Integration
 
-An equivalent way to hierarchically sort data.frames is to use `smartrank()` in the tidyverse `arrange()` function
+An equivalent way to hierarchically sort data.frames is to use `smartrank()` in the tidyverse `arrange()` function.
  
 ```{r}
 library(dplyr)
