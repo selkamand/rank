@@ -27,10 +27,24 @@ test_that("sorting by frequency works as expected", {
 })
 
 
-test_that("desc flag works as expected", {
+test_that("desc flag works as expected for numeric vectors", {
   x <- c(1, 3, 2, 5, 4)
+
   # Check the ranking when desc is set to TRUE
   expect_equal(smartrank(x, desc = TRUE, verbose = FALSE), c(5, 3, 4, 1, 2))
+
+  # Check the ranking when desc is set to FALSE
+  expect_equal(smartrank(x, desc = FALSE, verbose = FALSE), c(1, 3, 2, 5, 4))
+})
+
+test_that("desc flag works as expected for character vectors", {
+  x <- c("A", "B", "C", "D", "E", "E", NA_character_)
+
+  # Check the ranking when desc is set to TRUE
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = TRUE, verbose = FALSE, na.last = TRUE), c(6, 5, 4, 3, 1.5, 1.5, 7))
+
+  # Check the ranking when desc is set to FALSE
+  expect_equal(smartrank(x, sort_by = "alphabetical", desc = FALSE, verbose = FALSE, na.last = TRUE), c(1, 2, 3, 4, 5.5, 5.5, 7))
 })
 
 
@@ -56,6 +70,9 @@ test_that("'na.last' works as expected for numeric variables", {
 
   # Check the ranking when na.last is set to FALSE
   expect_equal(smartrank(x, na.last = FALSE, verbose = FALSE), c(3, 1, 4, 2, 5))
+
+  # Check the ranking when na.last is set to TRUE & desc = TRUE
+  expect_equal(smartrank(x, na.last = TRUE, desc=TRUE, verbose = FALSE), c(3, 4, 2, 5, 1))
 })
 
 
@@ -68,6 +85,9 @@ test_that("'na.last' works as expected for categorical variables", {
   # Check the ranking when na.last is set to FALSE and sort_by is set to "alphabetical"
   expect_equal(smartrank(x, sort_by = "alphabetical", na.last = FALSE, verbose = FALSE), rank(x, na.last = FALSE))
 
+  # Check the ranking when na.last is set to TRUE & desc = TRUE
+  expect_equal(smartrank(x, na.last = TRUE, desc=TRUE, verbose = FALSE), c(4.5, 6, 2.5, 7, 1, 4.5, 2.5))
+
   # Check the ranking when na.last is set to TRUE and sort_by is set to "frequency"
   expect_equal(smartrank(x, sort_by = "frequency", na.last = TRUE, verbose = FALSE), c(2, 4, 3, 5, 1, 2, 3))
 
@@ -78,6 +98,7 @@ test_that("'na.last' works as expected for categorical variables", {
   expect_equal(smartrank(x, sort_by = "alphabetical", na.last = NA, verbose = FALSE), rank(x, na.last = NA))
   expect_equal(smartrank(x, sort_by = "frequency", na.last = NA, verbose = FALSE), c(2, 3, 1, 2, 3))
 
+
   # What about when input vec is all NAs
   x <- c(NA, NA, NA)
   expect_equal(smartrank(x, sort_by = "frequency", na.last = TRUE, verbose = FALSE), c(1, 2, 3))
@@ -87,6 +108,26 @@ test_that("'na.last' works as expected for categorical variables", {
   expect_equal(smartrank(x, sort_by = "frequency", na.last = NA, verbose = FALSE), numeric(0))
 })
 
+# Test with all NAs
+test_that("smartrank handles all NAs correctly", {
+  x <- c(NA, NA, NA)
+  expect_equal(smartrank(x), c(1, 2, 3))
+  expect_equal(smartrank(x, na.last = NA), numeric(0))
+})
+
+# Test with NAs in different positions
+test_that("smartrank handles NAs in different positions", {
+  x <- c(NA, "b", "a", NA, "c")
+  expect_equal(smartrank(x), c(4, 2, 1, 5, 3))
+  expect_equal(smartrank(x, na.last = FALSE), c(1, 4, 3, 2, 5))
+  expect_equal(smartrank(x, na.last = NA), c(2, 1, 3))
+})
+
+# Test with na.last = FALSE
+test_that("smartrank handles na.last = FALSE correctly", {
+  x <- c("a", NA, "b")
+  expect_equal(smartrank(x, na.last = FALSE), c(2, 1, 3))
+})
 
 test_that("smartrank function throws appropriate errors when incorrect parameter types are supplied", {
   x <- c(1, 2, 3)
@@ -107,5 +148,27 @@ test_that("verbose flag works as expected", {
   x <- c("a", "b", "c", "a", "b")
   expect_message(smartrank(x, sort_by = "frequency", verbose = TRUE), "smartrank: Sorting a categorical variable by frequency: ignoring ties.method\n")
   expect_message(smartrank(x, sort_by = "frequency", verbose = FALSE), NA)
-
 })
+
+# Test with ties.method = "first"
+test_that("smartrank handles ties.method = 'first'", {
+  x <- c("b", "a", "b", "a")
+  expect_equal(smartrank(x, ties.method = "first"), c(3, 1, 4, 2))
+})
+
+# Test with ties.method = "random"
+test_that("smartrank handles ties.method = 'random'", {
+  x <- c("b", "a", "b", "a")
+  ranking <- smartrank(x, ties.method = "random")
+  expect_true(all(ranking %in% 1:4))
+  expect_true(length(unique(ranking)) == 4)
+})
+
+# Test with ties.method = "max"
+test_that("smartrank handles ties.method = 'max'", {
+  x <- c("b", "a", "b", "a")
+  expect_equal(smartrank(x, ties.method = "max"), c(4, 2, 4, 2))
+  expect_equal(smartrank(x, ties.method = "max"), c(4, 2, 4, 2))
+})
+
+

@@ -64,7 +64,18 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
   # Categorical Input -------------------------------------------------------
   if (is.character(x) || is.factor(x) || is.logical(x)) {
     if (sort_by == "alphabetical") {
-      return(rank(x, na.last=na.last, ties.method = ties.method))
+      alphabetical_rank <- rank(x, na.last=na.last, ties.method = ties.method)
+
+      # Sort alphabetically in descending order
+      if(desc){
+        max_rank <- ceiling(max(alphabetical_rank[!is.na(x)]))
+        alphabetical_rank <- ifelse(
+          test = !is.na(x),
+          yes = max_rank - alphabetical_rank + 1,
+          no = alphabetical_rank
+        )
+      }
+      return(alphabetical_rank)
     } else if (sort_by == "frequency") {
 
       # TODO ensure it works well with na.last and treats NAs as expected
@@ -124,4 +135,3 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
     return(ranking)
   }
 }
-
