@@ -40,6 +40,8 @@ remotes::install_github("selkamand/rank")
 
 ## Usage
 
+### Categorical Input
+
 ``` r
 library(rank)
 
@@ -60,10 +62,11 @@ smartrank(fruits, sort_by = "frequency")
 smartrank(fruits,sort_by = "frequency", desc = TRUE)
 #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #> [1] 1 2 1 3 2
+```
 
+### Numeric Input
 
-## NUMERICAL INPUT -----------------------
-
+``` r
 # rank numerically
 smartrank(c(1, 3, 2))
 #> [1] 1 3 2
@@ -71,11 +74,6 @@ smartrank(c(1, 3, 2))
 # rank numerically based on descending order
 smartrank(c(1, 3, 2), desc = TRUE)
 #> [1] 3 1 2
-
-# always rank numerically, irrespective of sort_by
-smartrank(c(1, 3, 2), sort_by = "frequency")
-#> smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically
-#> [1] 1 3 2
 ```
 
 ### Sorting By Rank
@@ -91,15 +89,17 @@ fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
 ```
 
-### Working with data-frames
+### Data-frames
 
-When working with data.frames, we not only wa
+`smartrank` can be used to arrange data.frames based on one or more
+columns, while maintaining complete control over how each column
+contributes to the final row order.
 
 #### BaseR
 
-For example, imagine we want to sort the following dataframe based on
-frequency of fruits, but break any ties based on the alphabetical order
-of the picker.
+For example, we can sort the following dataframe based on frequency of
+fruits, but break any ties based on the alphabetical order of the
+picker.
 
 ``` r
 data = data.frame(
@@ -114,7 +114,7 @@ fruit_ranks <- smartrank(data$fruits, sort_by = "frequency", desc=TRUE)
 # Rank pickers in alphabetical order
 picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE) 
 
-# Sort dataframe by the fruit_ranks, then the picker_ranks (heirarchical sot)
+# Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)
 data[order(fruit_ranks, picker_ranks),]
 #>   fruits    picker
 #> 3  Apple       Bob
@@ -126,8 +126,8 @@ data[order(fruit_ranks, picker_ranks),]
 
 #### Tidyverse Integration
 
-An equivalent way to hierarchically sort data.frames is to us
-`smartrank` in the tidyverse `arrange()` function
+An equivalent way to hierarchically sort data.frames is to use
+`smartrank()` in the tidyverse `arrange()` function
 
 ``` r
 library(dplyr)
@@ -140,7 +140,6 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 
-# Hierarchical Sort
 arrange(
   data, 
   smartrank(fruits, "frequency", desc = TRUE), 
