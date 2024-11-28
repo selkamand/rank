@@ -10,6 +10,7 @@ Description: Provides a flexible alternative to the built-in rank() function cal
 License: MIT + file LICENSE
 Suggests: 
     covr,
+    dplyr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
