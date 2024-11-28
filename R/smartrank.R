@@ -14,9 +14,25 @@
 #' @note When `sort_by = "frequency"` and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 #'
 #' @return The ranked vector
+#' @details
+#' If \code{x} includes ‘ties’ (equal values), the \code{ties.method} argument determines how the rank value is decided. Must be one of:
+#' \itemize{
+#'     \item \strong{average}: replaces integer ranks of tied values with their average  (default)
+#'     \item \strong{first}: first-occurring value is assumed to be the lower rank (closer to one)
+#'     \item \strong{last}: last-occurring value is assumed to be the lower rank (closer to one)
+#'     \item \strong{max} or \strong{min}: integer ranks of tied values are replaced with their maximum and minimum respectively (latter is typical in sports-ranking)
+#'     \item \strong{random} which of the tied values are higher / lower rank is randomly decided.
+#'}
+#'
+#' NA values are never considered to be equal:
+#' for na.last = TRUE and na.last = FALSE
+#' they are given distinct ranks in the order in which they occur in x.
+#'
 #' @examples
 #'
-#' ## CATEGORICAL INPUT -----------------------
+#' # ------------------
+#' ## CATEGORICAL INPUT
+#' # ------------------
 #' fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 #'
 #' # rank alphabetically
@@ -33,9 +49,14 @@
 #' #> smartrank: Sorting a categorical variable by frequency: ignoring ties.method
 #' #> [1] 1 2 1 3 2
 #'
+#' # Sort fruits vector based on rank
+#' ranks <- smartrank(fruits,sort_by = "frequency", desc = TRUE)
+#' fruits[order(ranks)]
+#' #> [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"
 #'
-#' ## NUMERICAL INPUT -----------------------
-#'
+#' # ------------------
+#' ## NUMERICAL INPUT
+#' # ------------------
 #' # rank numerically
 #' smartrank(c(1, 3, 2))
 #' #> [1] 1 3 2
