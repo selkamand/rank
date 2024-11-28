@@ -77,3 +77,53 @@ smartrank(c(1, 3, 2), sort_by = "frequency")
 ```
 
 
+### Sorting By Rank
+
+We can use `order` to sort vectors based on their ranks. For example, we can sort the `fruits` vector based on the frequency of each element.
+
+```{r}
+fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
+ranks <- smartrank(fruits, sort_by = "frequency")
+fruits[order(ranks)]
+```
+
+### Working with data-frames
+
+When working with data.frames, we not only wa
+
+#### BaseR
+
+For example, imagine we want to sort the following dataframe based on frequency of fruits, but break any ties based on the alphabetical order of the picker.
+
+```{r}
+data = data.frame(
+    fruits = c("Apple", "Orange", "Apple", "Pear", "Orange"),
+    picker = c("Elizabeth", "Damian",  "Bob", "Cameron", "Alice")
+)
+
+# Rank fruits so the most frequently picked fruits will come first
+fruit_ranks <- smartrank(data$fruits, sort_by = "frequency", desc=TRUE) 
+
+# Rank pickers in alphabetical order
+picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE) 
+
+# Sort dataframe by the fruit_ranks, then the picker_ranks (heirarchical sot)
+data[order(fruit_ranks, picker_ranks),]
+```
+
+
+#### Tidyverse Integration
+
+An equivalent way to hierarchically sort data.frames is to us `smartrank` in the tidyverse `arrange()` function
+ 
+```{r}
+library(dplyr)
+
+# Hierarchical Sort
+arrange(
+  data, 
+  smartrank(fruits, "frequency", desc = TRUE), 
+  smartrank(picker, "alphabetical", desc = FALSE)
+)
+```
+
