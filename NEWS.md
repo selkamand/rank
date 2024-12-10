@@ -1,3 +1,5 @@
+# rank (development version)
+
 # rank 0.1.1
 
 * Fixed documentation of ties.method paramater (#2)
