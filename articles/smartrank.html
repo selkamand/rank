@@ -55,8 +55,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Using smartrank</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Using smartrank</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/selkamand/rank/blob/master/vignettes/smartrank.Rmd" class="external-link"><code>vignettes/smartrank.Rmd</code></a></small>
@@ -94,7 +93,7 @@ order.</p></li>
 <span></span>
 <span><span class="co"># rank based on descending order of frequency</span></span>
 <span><span class="fu"><a href="../reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">fruits</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.5 3.5 1.5 5.0 3.5</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 3.5 1.5 3.5 5.0 1.5</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="ranking-numeric-vectors">Ranking numeric vectors<a class="anchor" aria-label="anchor" href="#ranking-numeric-vectors"></a>
@@ -148,10 +147,10 @@ picker.</p>
 <span><span class="co"># Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)</span></span>
 <span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">fruit_ranks</span>, <span class="va">picker_ranks</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="co">#&gt;   fruits    picker</span></span>
-<span><span class="co">#&gt; 3  Apple       Bob</span></span>
-<span><span class="co">#&gt; 1  Apple Elizabeth</span></span>
 <span><span class="co">#&gt; 5 Orange     Alice</span></span>
 <span><span class="co">#&gt; 2 Orange    Damian</span></span>
+<span><span class="co">#&gt; 3  Apple       Bob</span></span>
+<span><span class="co">#&gt; 1  Apple Elizabeth</span></span>
 <span><span class="co">#&gt; 4   Pear   Cameron</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -177,10 +176,10 @@ function.</p>
 <span>  <span class="fu"><a href="../reference/smartrank.html">smartrank</a></span><span class="op">(</span><span class="va">picker</span>, <span class="st">"alphabetical"</span>, desc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   fruits    picker</span></span>
-<span><span class="co">#&gt; 1  Apple       Bob</span></span>
-<span><span class="co">#&gt; 2  Apple Elizabeth</span></span>
-<span><span class="co">#&gt; 3 Orange     Alice</span></span>
-<span><span class="co">#&gt; 4 Orange    Damian</span></span>
+<span><span class="co">#&gt; 1 Orange     Alice</span></span>
+<span><span class="co">#&gt; 2 Orange    Damian</span></span>
+<span><span class="co">#&gt; 3  Apple       Bob</span></span>
+<span><span class="co">#&gt; 4  Apple Elizabeth</span></span>
 <span><span class="co">#&gt; 5   Pear   Cameron</span></span></code></pre></div>
 </div>
 </div>

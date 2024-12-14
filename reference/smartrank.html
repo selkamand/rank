@@ -7,7 +7,7 @@ Rank in descending or ascending order
 Rank categorical factors based on frequency instead of alphabetically
 Rank in descending or ascending order
 
-"></head><body>
+"><meta property="og:image" content="https://selkamand.github.io/rank/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -39,8 +39,7 @@ Rank in descending or ascending order
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Rank a vector based on either alphabetical or frequency order</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Rank a vector based on either alphabetical or frequency order</h1>
       <small class="dont-index">Source: <a href="https://github.com/selkamand/rank/blob/master/R/smartrank.R" class="external-link"><code>R/smartrank.R</code></a></small>
       <div class="d-none name"><code>smartrank.Rd</code></div>
     </div>
@@ -113,7 +112,7 @@ they are given distinct ranks in the order in which they occur in x.</p>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>When <code>sort_by = "frequency"</code>, ties based on frequency are broken by alphabetical order of the terms</p>
-<p>When <code>sort_by = "frequency"</code> and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates</p>
+<p>When <code>sort_by = "frequency"</code> and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates</p>
     </div>
 
     <div class="section level2">
@@ -137,13 +136,13 @@ they are given distinct ranks in the order in which they occur in x.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># rank based on descending order of frequency</span></span></span>
 <span class="r-in"><span><span class="fu">smartrank</span><span class="op">(</span><span class="va">fruits</span>, sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.5 3.5 1.5 5.0 3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.5 1.5 3.5 5.0 1.5</span>
 <span class="r-in"><span><span class="co">#&gt; [1] 1.5 3.5 1.5 5.0 3.5</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sort fruits vector based on rank</span></span></span>
 <span class="r-in"><span><span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu">smartrank</span><span class="op">(</span><span class="va">fruits</span>,sort_by <span class="op">=</span> <span class="st">"frequency"</span>, desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fruits</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Orange" "Orange" "Apple"  "Apple"  "Pear"  </span>
 <span class="r-in"><span><span class="co">#&gt; [1] "Apple"  "Apple"  "Orange" "Orange" "Pear"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
