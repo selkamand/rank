@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rank
+# rank <a href="https://selkamand.github.io/rank/"><img src="man/figures/logo.png" align="right" height="138" alt="rank website" /></a>
 
 <!-- badges: start -->
 
@@ -12,6 +12,12 @@ status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/p
 [![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
+![GitHub Issues or Pull
+Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
+[![code
+size](https://img.shields.io/github/languages/code-size/selkamand/rank.svg)](https://github.com/selkamand/rank)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/selkamand/rank)
 <!-- badges: end -->
 
 Rank provides a customizable alternative to the built-in `rank()`
@@ -57,7 +63,7 @@ smartrank(fruits, sort_by = "frequency")
 
 # rank based on descending order of frequency
 smartrank(fruits, sort_by = "frequency", desc = TRUE)
-#> [1] 1.5 3.5 1.5 5.0 3.5
+#> [1] 3.5 1.5 3.5 5.0 1.5
 ```
 
 ### Numeric Input
@@ -111,10 +117,10 @@ picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE)
 # Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)
 data[order(fruit_ranks, picker_ranks),]
 #>   fruits    picker
-#> 3  Apple       Bob
-#> 1  Apple Elizabeth
 #> 5 Orange     Alice
 #> 2 Orange    Damian
+#> 3  Apple       Bob
+#> 1  Apple Elizabeth
 #> 4   Pear   Cameron
 ```
 
@@ -140,9 +146,9 @@ arrange(
   smartrank(picker, "alphabetical", desc = FALSE)
 )
 #>   fruits    picker
-#> 1  Apple       Bob
-#> 2  Apple Elizabeth
-#> 3 Orange     Alice
-#> 4 Orange    Damian
+#> 1 Orange     Alice
+#> 2 Orange    Damian
+#> 3  Apple       Bob
+#> 4  Apple Elizabeth
 #> 5   Pear   Cameron
 ```

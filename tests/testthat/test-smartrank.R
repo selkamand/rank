@@ -188,6 +188,28 @@ test_that("smartrank correctly ranks when desc == TRUE and sort_by == 'frequency
   expect_equal(result, c(4.5, 2, 4.5, 6, 2, 2))
 })
 
+test_that("desc flag flips secondary and tertiary sort when frequencies are equal", {
+  x <- c("A", "A", "B", "B", "C", "C")
+
+  # When frequencies are the same, ties are broken alphabetically then by original index when desc = FALSE
+  result_false <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
+
+  # When desc = TRUE, we should invert the alphabetical and index order for ties
+  result_true <- smartrank(x, sort_by = "frequency", desc = TRUE, verbose = FALSE)
+
+  # The results should differ
+  expect_false(identical(result_false, result_true),
+               info = "Results should differ when desc is flipped if frequencies are tied")
+
+  # Check the ordering behavior:
+  # For desc = FALSE, after ranking, sorting by rank should yield elements in ascending alphabetical order (A, B, C)
+  expect_equal(unique(x[order(result_false)]), c("A", "B", "C"))
+
+  # For desc = TRUE, after updating the code to invert tie-breaks, sorting by rank should yield elements in descending alphabetical order (C, B, A)
+  expect_equal(unique(x[order(result_true)]), c("C", "B", "A"))
+})
+
+
 test_that("smartrank function throws an error when na.last or verbose are not logical values", {
   x <- c(1, 2, 3)
 
@@ -215,7 +237,7 @@ test_that("smartrank works with logical vectors", {
   expect_equal(result, expected)
 
   # When sort_by == "frequency", desc == TRUE
-  expected <- c(3.5, 1.5, 3.5, 1.5, 5)
+  expected <- c(1.5, 3.5, 1.5, 3.5, 5)
   result <- smartrank(x, sort_by = "frequency", desc = TRUE, verbose = FALSE)
   expect_equal(result, expected)
 
@@ -237,5 +259,6 @@ test_that("smartrank works with factor vectors", {
   result <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
   expect_equal(result, c(1.5, 5.5, 3.5, 1.5, 3.5, 5.5, 7))
 })
+
 
 
