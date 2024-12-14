@@ -12,6 +12,12 @@ status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/p
 [![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
+![GitHub Issues or Pull
+Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
+[![code
+size](https://img.shields.io/github/languages/code-size/selkamand/rank.svg)](https://github.com/selkamand/rank)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/selkamand/rank)
 <!-- badges: end -->
 
 Rank provides a customizable alternative to the built-in `rank()`
