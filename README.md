@@ -63,7 +63,7 @@ smartrank(fruits, sort_by = "frequency")
 
 # rank based on descending order of frequency
 smartrank(fruits, sort_by = "frequency", desc = TRUE)
-#> [1] 1.5 3.5 1.5 5.0 3.5
+#> [1] 3.5 1.5 3.5 5.0 1.5
 ```
 
 ### Numeric Input
@@ -117,10 +117,10 @@ picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE)
 # Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)
 data[order(fruit_ranks, picker_ranks),]
 #>   fruits    picker
-#> 3  Apple       Bob
-#> 1  Apple Elizabeth
 #> 5 Orange     Alice
 #> 2 Orange    Damian
+#> 3  Apple       Bob
+#> 1  Apple Elizabeth
 #> 4   Pear   Cameron
 ```
 
@@ -146,9 +146,9 @@ arrange(
   smartrank(picker, "alphabetical", desc = FALSE)
 )
 #>   fruits    picker
-#> 1  Apple       Bob
-#> 2  Apple Elizabeth
-#> 3 Orange     Alice
-#> 4 Orange    Damian
+#> 1 Orange     Alice
+#> 2 Orange    Damian
+#> 3  Apple       Bob
+#> 4  Apple Elizabeth
 #> 5   Pear   Cameron
 ```
