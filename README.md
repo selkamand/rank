@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rank
+# rank <a href="https://selkamand.github.io/rank/"><img src="man/figures/logo.pdf" align="right" height="138" alt="rank website" /></a>
 
 <!-- badges: start -->
 
