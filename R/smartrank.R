@@ -11,7 +11,7 @@
 #' @param verbose verbose (flag)
 #' @inheritParams base::rank
 #' @note When `sort_by = "frequency"`, ties based on frequency are broken by alphabetical order of the terms
-#' @note When `sort_by = "frequency"` and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
+#' @note When `sort_by = "frequency"` and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 #'
 #' @return The ranked vector
 #' @details
@@ -109,18 +109,21 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
       x = as.character(x)
 
       # Create a table of the frequencies of each element
+      # (by default this table is always sorted in ascending alphabetical order)
       freq_table <- as.data.frame(table(x))
 
-      # Add an index column to the table
-      freq_table$idx <- 1:nrow(freq_table)
-
-      # Sort the table by the frequencies in descending order, and by alphabetic order then by original index in case of ties
-      if(desc)
+      # Sort the table by the frequencies in descending order, then by alphabetic order.
+      # The secondary sort by alphabetical order guarantees no ties)
+      if(desc){
         freq  <-  -freq_table$Freq
-      else
+        level_names <- rev(freq_table$x) # Reverse the alphabetical order
+      }
+      else{
         freq <- freq_table$Freq
+        level_names <- freq_table$x
+      }
 
-      freq_table <- freq_table[order(freq, freq_table$x, freq_table$idx),]
+      freq_table <- freq_table[order(freq, level_names),]
 
       # Get the numerical order of elements by frequency
       ranking <- match(x, freq_table$x)
@@ -143,3 +146,4 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
     return(ranking)
   }
 }
+

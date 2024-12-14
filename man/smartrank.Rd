@@ -58,7 +58,7 @@ they are given distinct ranks in the order in which they occur in x.
 \note{
 When \code{sort_by = "frequency"}, ties based on frequency are broken by alphabetical order of the terms
 
-When \code{sort_by = "frequency"} and input is character, ties.method is ignored. each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
+When \code{sort_by = "frequency"} and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 }
 \examples{
 
