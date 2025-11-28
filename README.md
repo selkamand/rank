@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/package=rank)
 [![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
+coverage](https://codecov.io/gh/selkamand/rank/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank)
 ![GitHub Issues or Pull
 Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
 [![code
@@ -88,6 +88,23 @@ fruits <- c("Apple", "Orange", "Apple", "Pear", "Orange")
 ranks <- smartrank(fruits, sort_by = "frequency")
 fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
+```
+
+## Ranking and reordering by priority values
+
+`rank_by_priority()` assigns the *highest* ranks to specified values (in
+order), while all remaining values share the same lower rank.  
+`reorder_by_priority()` uses those ranks to move priority values to the
+front of the vector.
+
+``` r
+# Prioritise D first, then C; A and B follow in original order
+rank_by_priority(c("A", "B", "C", "D"), priority_values = c("D", "C"))
+#> [1] 3.5 3.5 2.0 1.0
+
+# Reorder so priorities come first
+reorder_by_priority(c("A", "B", "C", "D"), priority_values = c("D", "C"))
+#> [1] "D" "C" "A" "B"
 ```
 
 ### Data-frames
