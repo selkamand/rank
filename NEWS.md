@@ -6,6 +6,8 @@
   - `reorder_by_priority()` reorders a vector so that priority values appear
     first, while preserving the original order of all non-priority elements.
 
+* Added code of conduct
+
 # rank 0.1.1
 
 * Fixed documentation of ties.method paramater (#2)

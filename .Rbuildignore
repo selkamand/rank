@@ -10,3 +10,4 @@
 ^pkgdown$
 ^CRAN-SUBMISSION$
 ^revdep$
+^CODE_OF_CONDUCT\.md$
