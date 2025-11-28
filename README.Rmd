@@ -23,6 +23,9 @@ knitr::opts_chunk$set(
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
 [![code size](https://img.shields.io/github/languages/code-size/selkamand/rank.svg)](https://github.com/selkamand/rank)
 ![GitHub last commit](https://img.shields.io/github/last-commit/selkamand/rank)
+[![Dependencies](https://tinyverse.netlify.app/badge/rank)](https://cran.r-project.org/package=rank)
+[![](http://cranlogs.r-pkg.org/badges/last-month/rank)](https://cran.r-project.org/package=rank)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/rank)](https://cran.r-project.org/package=rank)
 <!-- badges: end -->
 
 Rank provides a customizable alternative to the built-in `rank()` function. The package offers the following features:
