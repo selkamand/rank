@@ -5,9 +5,9 @@
 #' @param priority_values A character vector descibing "priority" values.  Elements of `x` matching
 #'               `priority_values` will be ranked based on their order of appearance in `priority_values`
 #'
+#' @inheritParams base::rank
 #' @return A vector of ranks describing `x` such that \code{x[order(ranks)]}
 #' will move `priority_values` to the front of the vector
-#'
 #' @examples
 #' x <- c("A", "B", "C", "D", "E")
 #' rank_by_priority(x, c("C", "A"))
@@ -16,6 +16,7 @@
 #' rank_by_priority(1:6, c(4, 2, 7))
 #' #> [1] 4 2 1 3 5 6
 #'
+#' @export
 rank_by_priority <- function(x, priority_values, ties.method = "average") {
 
   # Assertions
