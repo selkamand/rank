@@ -141,3 +141,7 @@ arrange(
   smartrank(picker, "alphabetical", desc = FALSE)
 )
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).

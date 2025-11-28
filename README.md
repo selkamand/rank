@@ -169,3 +169,7 @@ arrange(
 #> 4  Apple Elizabeth
 #> 5   Pear   Cameron
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
