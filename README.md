@@ -90,6 +90,23 @@ fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
 ```
 
+## Ranking and reordering by priority values
+
+`rank_by_priority()` assigns the *highest* ranks to specified values (in
+order), while all remaining values share the same lower rank.  
+`reorder_by_priority()` uses those ranks to move priority values to the
+front of the vector.
+
+``` r
+# Prioritise D first, then C; A and B follow in original order
+rank_by_priority(c("A", "B", "C", "D"), priority_values = c("D", "C"))
+#> [1] 3.5 3.5 2.0 1.0
+
+# Reorder so priorities come first
+reorder_by_priority(c("A", "B", "C", "D"), priority_values = c("D", "C"))
+#> [1] "D" "C" "A" "B"
+```
+
 ### Data-frames
 
 `smartrank` can be used to arrange data.frames based on one or more

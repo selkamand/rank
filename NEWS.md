@@ -1,5 +1,11 @@
 # rank (development version)
 
+* Added two new functions for priority-based ranking:
+  - `rank_by_priority()` assigns highest ranks to user-specified values (in the
+    order supplied), with all remaining values tied.
+  - `reorder_by_priority()` reorders a vector so that priority values appear
+    first, while preserving the original order of all non-priority elements.
+
 # rank 0.1.1
 
 * Fixed documentation of ties.method paramater (#2)
