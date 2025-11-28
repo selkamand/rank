@@ -93,7 +93,7 @@ fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
 ```
 
-## Ranking and reordering by priority values
+### Ranking and reordering by priority values
 
 `rank_by_priority()` assigns the *highest* ranks to specified values (in
 order), while all remaining values share the same lower rank.  
