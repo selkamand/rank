@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/rank)](https://CRAN.R-project.org/package=rank)
 [![R-CMD-check](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/rank/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/selkamand/rank/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank?branch=master)
+coverage](https://codecov.io/gh/selkamand/rank/graph/badge.svg)](https://app.codecov.io/gh/selkamand/rank)
 ![GitHub Issues or Pull
 Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
 [![code
