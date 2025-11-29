@@ -57,6 +57,7 @@ Rank in descending or ascending order
 <span>  desc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ties.method <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  na.last <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  freq_tiebreak <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"match_desc"</span>, <span class="st">"asc"</span>, <span class="st">"desc"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,6 +91,19 @@ When input is numeric, ranking is always based on numeric order.</p></dd>
     are removed; if <code>"keep"</code> they are kept with rank <code>NA</code>.</p></dd>
 
 
+<dt id="arg-freq-tiebreak">freq_tiebreak<a class="anchor" aria-label="anchor" href="#arg-freq-tiebreak"></a></dt>
+<dd><p>Controls how alphabetical tie-breaking works when
+<code>sort_by = "frequency"</code> and <code>x</code> is character/factor/logical. Must be
+one of:</p><ul><li><p><code>"match_desc"</code> (default): alphabetical tie-breaking direction
+follows <code>desc</code> (ascending when <code>desc = FALSE</code>, descending when
+<code>desc = TRUE</code>).</p></li>
+<li><p><code>"asc"</code>: ties are always broken by <strong>ascending</strong> alphabetical
+order, regardless of <code>desc</code>.</p></li>
+<li><p><code>"desc"</code>: ties are always broken by <strong>descending</strong> alphabetical
+order, regardless of <code>desc</code>.</p></li>
+</ul></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>verbose (flag)</p></dd>
 
@@ -111,7 +125,10 @@ they are given distinct ranks in the order in which they occur in x.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>When <code>sort_by = "frequency"</code>, ties based on frequency are broken by alphabetical order of the terms</p>
+    <p>When <code>sort_by = "frequency"</code>, ties based on frequency are broken by
+alphabetical order of the terms. Use <code>freq_tiebreak</code> to control whether
+that alphabetical tie-breaking is ascending, descending, or follows
+<code>desc</code>.</p>
 <p>When <code>sort_by = "frequency"</code> and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates</p>
     </div>
 

@@ -2,6 +2,16 @@
 
 ## rank (development version)
 
+- Enhanced
+  [`smartrank()`](https://selkamand.github.io/rank/reference/smartrank.md):
+  - Added the `freq_tiebreak` argument with options `"match_desc"`,
+    `"asc"`, and `"desc"` to control alphabetical tie-breaking when
+    ranking character vectors by frequency.
+- Added a new hierarchical ranking function:
+  - [`rank_stratified()`](https://selkamand.github.io/rank/reference/rank_stratified.md)
+    performs **true stratified hierarchical ranking** across multiple
+    variables. Each variable is ranked within groups defined by all
+    previous variables.
 - Added two new functions for priority-based ranking:
   - [`rank_by_priority()`](https://selkamand.github.io/rank/reference/rank_by_priority.md)
     assigns highest ranks to user-specified values (in the order
@@ -9,6 +19,7 @@
   - [`reorder_by_priority()`](https://selkamand.github.io/rank/reference/reorder_by_priority.md)
     reorders a vector so that priority values appear first, while
     preserving the original order of all non-priority elements.
+- Added code of conduct and CONTRIBUTING.md
 
 ## rank 0.1.1
 

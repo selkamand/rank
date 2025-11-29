@@ -37,12 +37,20 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="rank-development-version">rank (development version)<a class="anchor" aria-label="anchor" href="#rank-development-version"></a></h2>
-<ul><li>Added two new functions for priority-based ranking:
+<ul><li>Enhanced <code><a href="../reference/smartrank.html">smartrank()</a></code>:
+<ul><li>Added the <code>freq_tiebreak</code> argument with options <code>"match_desc"</code>, <code>"asc"</code>, and <code>"desc"</code> to control alphabetical tie-breaking when ranking character vectors by frequency.</li>
+</ul></li>
+<li>Added a new hierarchical ranking function:
+<ul><li>
+<code><a href="../reference/rank_stratified.html">rank_stratified()</a></code> performs <strong>true stratified hierarchical ranking</strong> across multiple variables. Each variable is ranked within groups defined by all previous variables.</li>
+</ul></li>
+<li>Added two new functions for priority-based ranking:
 <ul><li>
 <code><a href="../reference/rank_by_priority.html">rank_by_priority()</a></code> assigns highest ranks to user-specified values (in the order supplied), with all remaining values tied.</li>
 <li>
 <code><a href="../reference/reorder_by_priority.html">reorder_by_priority()</a></code> reorders a vector so that priority values appear first, while preserving the original order of all non-priority elements.</li>
 </ul></li>
+<li>Added code of conduct and CONTRIBUTING.md</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="rank-011">rank 0.1.1<a class="anchor" aria-label="anchor" href="#rank-011"></a></h2><p class="text-muted">CRAN release: 2024-12-01</p>

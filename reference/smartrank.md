@@ -18,6 +18,7 @@ smartrank(
   desc = FALSE,
   ties.method = "average",
   na.last = TRUE,
+  freq_tiebreak = c("match_desc", "asc", "desc"),
   verbose = TRUE
 )
 ```
@@ -50,6 +51,22 @@ smartrank(
   [`NA`](https://rdrr.io/r/base/NA.html)s. If `TRUE`, missing values in
   the data are put last; if `FALSE`, they are put first; if `NA`, they
   are removed; if `"keep"` they are kept with rank `NA`.
+
+- freq_tiebreak:
+
+  Controls how alphabetical tie-breaking works when
+  `sort_by = "frequency"` and `x` is character/factor/logical. Must be
+  one of:
+
+  - `"match_desc"` (default): alphabetical tie-breaking direction
+    follows `desc` (ascending when `desc = FALSE`, descending when
+    `desc = TRUE`).
+
+  - `"asc"`: ties are always broken by **ascending** alphabetical order,
+    regardless of `desc`.
+
+  - `"desc"`: ties are always broken by **descending** alphabetical
+    order, regardless of `desc`.
 
 - verbose:
 
@@ -87,7 +104,9 @@ occur in x.
 ## Note
 
 When `sort_by = "frequency"`, ties based on frequency are broken by
-alphabetical order of the terms
+alphabetical order of the terms. Use `freq_tiebreak` to control whether
+that alphabetical tie-breaking is ascending, descending, or follows
+`desc`.
 
 When `sort_by = "frequency"` and input is character, ties.method is
 ignored. Each distinct element level gets its own rank, and each rank is

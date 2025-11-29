@@ -1,5 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://selkamand.github.io/rank/404.html</loc></url>
+<url><loc>https://selkamand.github.io/rank/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://selkamand.github.io/rank/CONTRIBUTING.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/LICENSE-text.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/LICENSE.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/articles/index.html</loc></url>
@@ -9,6 +11,7 @@
 <url><loc>https://selkamand.github.io/rank/news/index.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/reference/index.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/reference/rank_by_priority.html</loc></url>
+<url><loc>https://selkamand.github.io/rank/reference/rank_stratified.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/reference/reorder_by_priority.html</loc></url>
 <url><loc>https://selkamand.github.io/rank/reference/smartrank.html</loc></url>
 </urlset>

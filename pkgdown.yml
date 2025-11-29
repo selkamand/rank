@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   smartrank: smartrank.html
-last_built: 2025-11-28T04:05Z
+last_built: 2025-11-29T14:21Z
 urls:
   reference: https://selkamand.github.io/rank/reference
   article: https://selkamand.github.io/rank/articles
