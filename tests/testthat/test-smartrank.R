@@ -261,4 +261,54 @@ test_that("smartrank works with factor vectors", {
 })
 
 
+test_that("freq_tiebreak = 'match_desc' makes tie-breaking follow desc", {
+  x <- c("a", "a", "b", "b")
+
+  # Default behaviour: freq_tiebreak = "match_desc"
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,  verbose = FALSE)
+
+  # When desc = FALSE: alphabetical ascending for ties
+  expect_equal(unique(x[order(r_false)]), c("a", "b"))
+
+  # When desc = TRUE: alphabetical descending for ties
+  expect_equal(unique(x[order(r_true)]),  c("b", "a"))
+})
+
+test_that("freq_tiebreak = 'asc' keeps alphabetical tie-breaking ascending regardless of desc", {
+  x <- c("a", "a", "b", "b")
+
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE,
+                       freq_tiebreak = "asc", verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,
+                       freq_tiebreak = "asc", verbose = FALSE)
+
+  # In both cases, ties should break in ascending alphabetical order
+  expect_equal(unique(x[order(r_false)]), c("a", "b"))
+  expect_equal(unique(x[order(r_true)]),  c("a", "b"))
+})
+
+test_that("freq_tiebreak = 'desc' keeps alphabetical tie-breaking descending regardless of desc", {
+  x <- c("a", "a", "b", "b")
+
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE,
+                       freq_tiebreak = "desc", verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,
+                       freq_tiebreak = "desc", verbose = FALSE)
+
+  # In both cases, ties should break in descending alphabetical order
+  expect_equal(unique(x[order(r_false)]), c("b", "a"))
+  expect_equal(unique(x[order(r_true)]),  c("b", "a"))
+})
+
+test_that("freq_tiebreak must be one of 'match_desc', 'asc', or 'desc'", {
+  x <- c("a", "b", "b", "a")
+
+  expect_error(
+    smartrank(x, sort_by = "frequency", freq_tiebreak = "foo", verbose = FALSE),
+    "match_desc"
+  )
+})
+
+
 
