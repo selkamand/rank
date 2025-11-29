@@ -1,10 +1,22 @@
 # rank (development version)
 
+* Enhanced `smartrank()`:
+  - Added the `freq_tiebreak` argument with options `"match_desc"`, `"asc"`,
+    and `"desc"` to control alphabetical tie-breaking when ranking character vectors
+    by frequency.
+
+* Added a new hierarchical ranking function:
+  - `rank_stratified()` performs **true stratified hierarchical ranking** across
+    multiple variables. Each variable is ranked within groups defined by all
+    previous variables.
+
 * Added two new functions for priority-based ranking:
   - `rank_by_priority()` assigns highest ranks to user-specified values (in the
     order supplied), with all remaining values tied.
   - `reorder_by_priority()` reorders a vector so that priority values appear
     first, while preserving the original order of all non-priority elements.
+
+* Added code of conduct and CONTRIBUTING.md
 
 # rank 0.1.1
 

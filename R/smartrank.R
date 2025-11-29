@@ -8,9 +8,25 @@
 #' @param sort_by Sort ranking either by "alphabetical" or "frequency" . Default is "alphabetical"
 #' @param desc A logical indicating whether the ranking should be in descending ( TRUE ) or ascending ( FALSE ) order.
 #'  When input is numeric, ranking is always based on numeric order.
+#' @param freq_tiebreak Controls how alphabetical tie-breaking works when
+#'   `sort_by = "frequency"` and `x` is character/factor/logical. Must be
+#'   one of:
+#'   \itemize{
+#'     \item `"match_desc"` (default): alphabetical tie-breaking direction
+#'       follows `desc` (ascending when `desc = FALSE`, descending when
+#'       `desc = TRUE`).
+#'     \item `"asc"`: ties are always broken by **ascending** alphabetical
+#'       order, regardless of `desc`.
+#'     \item `"desc"`: ties are always broken by **descending** alphabetical
+#'       order, regardless of `desc`.
+#'   }
+#'
 #' @param verbose verbose (flag)
 #' @inheritParams base::rank
-#' @note When `sort_by = "frequency"`, ties based on frequency are broken by alphabetical order of the terms
+#' @note When `sort_by = "frequency"`, ties based on frequency are broken by
+#'   alphabetical order of the terms. Use `freq_tiebreak` to control whether
+#'   that alphabetical tie-breaking is ascending, descending, or follows
+#'   `desc`.
 #' @note When `sort_by = "frequency"` and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 #'
 #' @return The ranked vector
@@ -71,16 +87,18 @@
 #' #> smartrank: Sorting a non-categorical variable. Ignoring `sort_by` and sorting numerically
 #' #> [1] 1 3 2
 #' @export
-smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE, ties.method = "average",  na.last = TRUE, verbose = TRUE) {
+smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE, ties.method = "average",  na.last = TRUE, freq_tiebreak = c("match_desc", "asc", "desc"), verbose = TRUE) {
 
   # Assertions --------------------------------------------------------------
-  if(identical(sort_by, c("alphabetical", "frequency"))) sort_by <- "alphabetical"
-  if(!(is.character(sort_by) && length(sort_by) == 1)) stop("sort_by must be one of 'alphabetical' or 'frequency'")
-  if(!sort_by %in% c('alphabetical', 'frequency')) stop("sort_by must be one of 'alphabetical' or 'frequency'")
-  if(!(!is.null(na.last) & is.logical(na.last))) stop("na.last must be TRUE/FALSE")
-  if(!(!is.null(verbose) && !is.na(verbose) && is.logical(verbose))) stop("verbose must be TRUE/FALSE")
-  if(length(ties.method) > 1 || ! ties.method %in% c( "average", "first", "last", "random", "max", "min")) stop('ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
+  if (identical(sort_by, c("alphabetical", "frequency"))) sort_by <- "alphabetical"
+  if (!(is.character(sort_by) && length(sort_by) == 1)) stop("sort_by must be one of 'alphabetical' or 'frequency'")
+  if (!sort_by %in% c('alphabetical', 'frequency')) stop("sort_by must be one of 'alphabetical' or 'frequency'")
+  if (!(!is.null(na.last) & is.logical(na.last))) stop("na.last must be TRUE/FALSE")
+  if (!(!is.null(verbose) && !is.na(verbose) && is.logical(verbose))) stop("verbose must be TRUE/FALSE")
+  if (length(ties.method) > 1 || !ties.method %in% c( "average", "first", "last", "random", "max", "min")) stop('ties.method should be one of: "average", "first", "last", "random", "max", or "min"')
 
+  # Argument parsing
+  freq_tiebreak <- match.arg(freq_tiebreak)
 
 
   # Categorical Input -------------------------------------------------------
@@ -112,15 +130,27 @@ smartrank <- function(x, sort_by = c("alphabetical", "frequency"), desc = FALSE,
       # (by default this table is always sorted in ascending alphabetical order)
       freq_table <- as.data.frame(table(x))
 
-      # Sort the table by the frequencies in descending order, then by alphabetic order.
-      # The secondary sort by alphabetical order guarantees no ties)
+      # Sort the table by the frequencies in descending order
       if(desc){
         freq  <-  -freq_table$Freq
-        level_names <- rev(freq_table$x) # Reverse the alphabetical order
       }
       else{
         freq <- freq_table$Freq
-        level_names <- freq_table$x
+      }
+
+      # Break frequency-based ties based on alphabetical order
+      # Decide alphabetical tie-break direction based on freq_tiebreak
+      tiebreak_desc <- switch(
+        freq_tiebreak,
+        match_desc = desc,
+        asc        = FALSE,
+        desc       = TRUE
+      )
+
+      if (tiebreak_desc) {
+        level_names <- rev(freq_table$x)  # descending alphabetical
+      } else {
+        level_names <- freq_table$x       # ascending alphabetical
       }
 
       freq_table <- freq_table[order(freq, level_names),]

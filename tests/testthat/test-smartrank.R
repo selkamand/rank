@@ -261,4 +261,188 @@ test_that("smartrank works with factor vectors", {
 })
 
 
+test_that("freq_tiebreak = 'match_desc' makes tie-breaking follow desc", {
+  x <- c("a", "a", "b", "b")
+
+  # Default behaviour: freq_tiebreak = "match_desc"
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE, verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,  verbose = FALSE)
+
+  # When desc = FALSE: alphabetical ascending for ties
+  expect_equal(unique(x[order(r_false)]), c("a", "b"))
+
+  # When desc = TRUE: alphabetical descending for ties
+  expect_equal(unique(x[order(r_true)]),  c("b", "a"))
+})
+
+test_that("freq_tiebreak = 'asc' keeps alphabetical tie-breaking ascending regardless of desc", {
+  x <- c("a", "a", "b", "b")
+
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE,
+                       freq_tiebreak = "asc", verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,
+                       freq_tiebreak = "asc", verbose = FALSE)
+
+  # In both cases, ties should break in ascending alphabetical order
+  expect_equal(unique(x[order(r_false)]), c("a", "b"))
+  expect_equal(unique(x[order(r_true)]),  c("a", "b"))
+})
+
+test_that("freq_tiebreak = 'desc' keeps alphabetical tie-breaking descending regardless of desc", {
+  x <- c("a", "a", "b", "b")
+
+  r_false <- smartrank(x, sort_by = "frequency", desc = FALSE,
+                       freq_tiebreak = "desc", verbose = FALSE)
+  r_true  <- smartrank(x, sort_by = "frequency", desc = TRUE,
+                       freq_tiebreak = "desc", verbose = FALSE)
+
+  # In both cases, ties should break in descending alphabetical order
+  expect_equal(unique(x[order(r_false)]), c("b", "a"))
+  expect_equal(unique(x[order(r_true)]),  c("b", "a"))
+})
+
+test_that("freq_tiebreak must be one of 'match_desc', 'asc', or 'desc'", {
+  x <- c("a", "b", "b", "a")
+
+  expect_error(
+    smartrank(x, sort_by = "frequency", freq_tiebreak = "foo", verbose = FALSE),
+    "match_desc"
+  )
+})
+
+test_that("rank_stratified uses all columns when cols = NULL (default)", {
+  data <- data.frame(
+    g = c("A", "A", "B", "B"),
+    x = c("z", "a", "z", "a")
+  )
+
+  # Explicit cols = NULL should match implicit default
+  r_default <- rank_stratified(
+    data,
+    cols    = NULL,
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  r_explicit <- rank_stratified(
+    data,
+    cols    = c("g", "x"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  expect_equal(r_default, r_explicit)
+})
+
+test_that("rank_stratified respects column order specified in cols", {
+  data <- data.frame(
+    g = c("A", "A", "B", "B"),
+    x = c("z", "a", "z", "a")
+  )
+
+  # Case 1: group first, then value
+  r_gx <- rank_stratified(
+    data,
+    cols    = c("g", "x"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+  ord_gx <- order(r_gx)
+
+  # All A before all B; within each, a then z
+  expect_equal(data$g[ord_gx], c("A", "A", "B", "B"))
+  expect_equal(
+    data$x[ord_gx],
+    c("a", "z", "a", "z")
+  )
+
+  # Case 2: value first, then group
+  r_xg <- rank_stratified(
+    data,
+    cols    = c("x", "g"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+  ord_xg <- order(r_xg)
+
+  # All rows with 'a' come before all rows with 'z'
+  expect_equal(data$x[ord_xg], c("a", "a", "z", "z"))
+})
+
+test_that("rank_stratified accepts numeric column positions in cols", {
+  data <- data.frame(
+    g = c("A", "A", "B", "B"),
+    x = c("z", "a", "z", "a")
+  )
+
+  r_names <- rank_stratified(
+    data,
+    cols    = c("g", "x"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  r_pos <- rank_stratified(
+    data,
+    cols    = c(1L, 2L),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  expect_equal(r_names, r_pos)
+})
+
+test_that("rank_stratified errors when cols contains unknown column names", {
+  data <- data.frame(
+    g = c("A", "B"),
+    x = c("a", "b")
+  )
+
+  expect_error(
+    rank_stratified(data, cols = c("g", "not_a_col")),
+    regexp = "All `cols` must be present in `data`"
+  )
+})
+
+test_that("rank_stratified errors when cols is numeric but out of bounds", {
+  data <- data.frame(
+    g = c("A", "B"),
+    x = c("a", "b")
+  )
+
+  expect_error(
+    rank_stratified(data, cols = c(1L, 3L)),
+    regexp = "Numeric `cols` must be valid column positions in `data`"
+  )
+})
+
+test_that("rank_stratified errors when cols is zero-length", {
+  data <- data.frame(
+    g = c("A", "B"),
+    x = c("a", "b")
+  )
+
+  expect_error(
+    rank_stratified(data, cols = character(0)),
+    regexp = "`cols` must contain at least one column name or position"
+  )
+
+  expect_error(
+    rank_stratified(data, cols = integer(0)),
+    regexp = "`cols` must contain at least one column name or position"
+  )
+})
+
+test_that("rank_stratified errors when cols is of unsupported type", {
+  data <- data.frame(
+    g = c("A", "B"),
+    x = c("a", "b")
+  )
+
+  expect_error(
+    rank_stratified(data, cols = list("g")),
+    regexp = "`cols` must be NULL, a character vector, or an integer vector"
+  )
+})
+
 

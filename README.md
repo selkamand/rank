@@ -18,6 +18,9 @@ Requests](https://img.shields.io/github/issues-closed/selkamand/rank)
 size](https://img.shields.io/github/languages/code-size/selkamand/rank.svg)](https://github.com/selkamand/rank)
 ![GitHub last
 commit](https://img.shields.io/github/last-commit/selkamand/rank)
+[![Dependencies](https://tinyverse.netlify.app/badge/rank)](https://cran.r-project.org/package=rank)
+[![](http://cranlogs.r-pkg.org/badges/last-month/rank)](https://cran.r-project.org/package=rank)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/rank)](https://cran.r-project.org/package=rank)
 <!-- badges: end -->
 
 Rank provides a customizable alternative to the built-in `rank()`
@@ -90,7 +93,7 @@ fruits[order(ranks)]
 #> [1] "Pear"   "Apple"  "Apple"  "Orange" "Orange"
 ```
 
-## Ranking and reordering by priority values
+### Ranking and reordering by priority values
 
 `rank_by_priority()` assigns the *highest* ranks to specified values (in
 order), while all remaining values share the same lower rank.  
@@ -107,7 +110,38 @@ reorder_by_priority(c("A", "B", "C", "D"), priority_values = c("D", "C"))
 #> [1] "D" "C" "A" "B"
 ```
 
-### Data-frames
+### Stratified / hierarchical ranking
+
+`rank_stratified()` computes a single combined rank across all columns
+of a data frame, where each column is ranked within groups defined by
+all previous columns. This produces a true hierarchical ordering.
+
+``` r
+data <- data.frame(
+  gender = c("male", "male", "male", "male", "female", "female", "male", "female"),
+  pet    = c("cat", "cat", "magpie", "magpie", "giraffe", "cat", "giraffe", "cat")
+)
+
+# Hierarchical ranking:
+# 1. Rank gender (globally, by frequency)
+# 2. Within each gender, rank pet by within-gender frequency
+r <- rank_stratified(
+  data,
+  sort_by = c("frequency", "frequency"),
+  desc    = TRUE
+)
+
+data[order(r), ]
+#>   gender     pet
+#> 3   male  magpie
+#> 4   male  magpie
+#> 1   male     cat
+#> 2   male     cat
+#> 7   male giraffe
+#> 6 female     cat
+#> 8 female     cat
+#> 5 female giraffe
+```
 
 `smartrank` can be used to arrange data.frames based on one or more
 columns, while maintaining complete control over how each column
@@ -120,19 +154,22 @@ fruits, but break any ties based on the alphabetical order of the
 picker.
 
 ``` r
-data = data.frame(
-    fruits = c("Apple", "Orange", "Apple", "Pear", "Orange"),
-    picker = c("Elizabeth", "Damian",  "Bob", "Cameron", "Alice")
+data <- data.frame(
+  fruits = c("Apple", "Orange", "Apple", "Pear", "Orange"),
+  picker = c("Elizabeth", "Damian", "Bob", "Cameron", "Alice")
 )
 
-# Rank fruits so the most frequently picked fruits will come first
-fruit_ranks <- smartrank(data$fruits, sort_by = "frequency", desc=TRUE) 
+# Rank_stratified():
+# 1. Rank fruits by frequency (globally)
+# 2. Within each fruit, rank pickers alphabetically
+strat_ranks <- rank_stratified(
+  data,
+  cols = c("fruits", "picker"),
+  sort_by = c("frequency", "alphabetical"),
+  desc = c(TRUE, FALSE)
+)
 
-# Rank pickers in alphabetical order
-picker_ranks <- smartrank(data$picker, sort_by = "alphabetical", desc=FALSE) 
-
-# Sort dataframe by the fruit_ranks, then the picker_ranks (hierarchical)
-data[order(fruit_ranks, picker_ranks),]
+data[order(strat_ranks), ]
 #>   fruits    picker
 #> 5 Orange     Alice
 #> 2 Orange    Damian
@@ -143,8 +180,8 @@ data[order(fruit_ranks, picker_ranks),]
 
 #### Tidyverse Integration
 
-An equivalent way to hierarchically sort data.frames is to use
-`smartrank()` in the tidyverse `arrange()` function
+An equivalent way to hierarchically sort data.frames is to use the
+tidyverse `arrange()` function
 
 ``` r
 library(dplyr)
@@ -158,9 +195,13 @@ library(dplyr)
 #>     intersect, setdiff, setequal, union
 
 arrange(
-  data, 
-  smartrank(fruits, "frequency", desc = TRUE), 
-  smartrank(picker, "alphabetical", desc = FALSE)
+  data,
+  rank_stratified(
+    data,
+    cols = c("fruits", "picker"),
+    sort_by = c("frequency", "alphabetical"),
+    desc = c(TRUE, FALSE)
+  )
 )
 #>   fruits    picker
 #> 1 Orange     Alice
@@ -169,3 +210,7 @@ arrange(
 #> 4  Apple Elizabeth
 #> 5   Pear   Cameron
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).

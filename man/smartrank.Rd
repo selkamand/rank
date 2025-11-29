@@ -10,6 +10,7 @@ smartrank(
   desc = FALSE,
   ties.method = "average",
   na.last = TRUE,
+  freq_tiebreak = c("match_desc", "asc", "desc"),
   verbose = TRUE
 )
 }
@@ -28,6 +29,19 @@ When input is numeric, ranking is always based on numeric order.}
     of \code{\link[base]{NA}}s. If \code{TRUE}, missing values in the data are
     put last; if \code{FALSE}, they are put first; if \code{NA}, they
     are removed; if \code{"keep"} they are kept with rank \code{NA}.}
+
+\item{freq_tiebreak}{Controls how alphabetical tie-breaking works when
+\code{sort_by = "frequency"} and \code{x} is character/factor/logical. Must be
+one of:
+\itemize{
+\item \code{"match_desc"} (default): alphabetical tie-breaking direction
+follows \code{desc} (ascending when \code{desc = FALSE}, descending when
+\code{desc = TRUE}).
+\item \code{"asc"}: ties are always broken by \strong{ascending} alphabetical
+order, regardless of \code{desc}.
+\item \code{"desc"}: ties are always broken by \strong{descending} alphabetical
+order, regardless of \code{desc}.
+}}
 
 \item{verbose}{verbose (flag)}
 }
@@ -56,7 +70,10 @@ for na.last = TRUE and na.last = FALSE
 they are given distinct ranks in the order in which they occur in x.
 }
 \note{
-When \code{sort_by = "frequency"}, ties based on frequency are broken by alphabetical order of the terms
+When \code{sort_by = "frequency"}, ties based on frequency are broken by
+alphabetical order of the terms. Use \code{freq_tiebreak} to control whether
+that alphabetical tie-breaking is ascending, descending, or follows
+\code{desc}.
 
 When \code{sort_by = "frequency"} and input is character, ties.method is ignored. Each distinct element level gets its own rank, and each rank is 1 unit away from the next element, irrespective of how many duplicates
 }
