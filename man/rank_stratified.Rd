@@ -6,6 +6,7 @@
 \usage{
 rank_stratified(
   data,
+  cols = NULL,
   sort_by = "frequency",
   desc = FALSE,
   ties.method = "average",
@@ -15,6 +16,18 @@ rank_stratified(
 )
 }
 \arguments{
+\item{data}{A data frame. Each selected column
+represents one level of the stratified hierarchy, in the order given by
+\code{cols}.}
+
+\item{cols}{Optional column specification indicating which variables in \code{data}
+to use for ranking, and in what order. Can be:
+\itemize{
+\item \code{NULL} (default): use all columns of \code{data} in their existing order.
+\item A character vector of column names.
+\item An integer vector of column positions.
+}}
+
 \item{sort_by}{Character scalar or vector specifying how to rank each
 non-numeric column. Each element must be either \code{"alphabetical"} or
 \code{"frequency"}, matching the behaviour of \code{\link[=smartrank]{smartrank()}}. If a single
@@ -29,10 +42,11 @@ columns.}
 level; must be one of \code{"average"}, \code{"first"}, \code{"last"}, \code{"random"},
 \code{"max"}, or \code{"min"}. See \code{\link[base:rank]{base::rank()}} for details.}
 
-\item{na.last}{Logical or \code{NA}, controlling the treatment of missing values,
+\item{na.last}{Logical, controlling the treatment of missing values,
 as in \code{\link[base:rank]{base::rank()}}. If \code{TRUE}, \code{NA}s are given the largest ranks; if
-\code{FALSE}, the smallest; if \code{NA}, \code{NA}s are removed before ranking at each
-level.}
+\code{FALSE}, the smallest. Unlike \code{\link[base:rank]{base::rank()}} or \code{\link[=smartrank]{smartrank()}}, \code{na.last}
+cannot be set to \code{NA} in \code{rank_stratified()}, because dropping rows would
+change group membership and break stratified ranking.}
 
 \item{freq_tiebreak}{Character scalar or vector controlling how
 alphabetical tie-breaking works when \code{sort_by = "frequency"} and the
@@ -48,28 +62,14 @@ If a single value is supplied, it is recycled for all columns.}
 
 \item{verbose}{Logical; if \code{TRUE}, emit messages when \code{sort_by} is ignored
 (e.g. for numeric columns), mirroring the behaviour of \code{\link[=smartrank]{smartrank()}}.}
-
-\item{x}{A data frame or list of equal-length vectors. Each selected column
-represents one level of the stratified hierarchy, in the order given by
-\code{cols}.}
-
-\item{cols}{Optional column specification indicating which variables in \code{x}
-to use for ranking, and in what order. Can be:
-\itemize{
-\item \code{NULL} (default): use all columns of \code{x} in their existing order.
-\item A character vector of column names.
-\item An integer vector of column positions.
-}}
 }
 \value{
-A numeric vector of length \code{nrow(x)} (or \code{length(x[[1]])} for lists),
-containing stratified ranks. Smaller values indicate "earlier" rows in the
-stratified hierarchy. The vector is suitable for use with \code{\link[base:order]{base::order()}}
-or \code{\link[dplyr:arrange]{dplyr::arrange()}}.
+A numeric vector of length \code{nrow(data)}, containing stratified ranks.
+Smaller values indicate "earlier" rows in the stratified hierarchy.
 }
 \description{
 \code{rank_stratified()} computes a single, combined rank for each row of a
-data frame (or list of vectors) using \strong{stratified hierarchical ranking}.
+data frame using \strong{stratified hierarchical ranking}.
 The first variable is ranked globally; each subsequent variable is then
 ranked \strong{within strata defined by all previous variables}.
 }
@@ -80,7 +80,7 @@ for example, rows are first grouped and ordered by the frequency of
 of \code{pet} \strong{within that gender}, rather than globally.
 
 The result is a single rank vector that can be passed directly to
-\code{\link[base:order]{base::order()}} or \code{\link[dplyr:arrange]{dplyr::arrange()}} to obtain a stratified, multi-level
+\code{\link[base:order]{base::order()}} to obtain a stratified, multi-level
 ordering.
 
 Stratified ranking proceeds level by level:
@@ -96,14 +96,9 @@ ranking is done within strata defined by columns 1, 2, ..., \emph{k-1}.
 }
 
 This yields a single composite rank per row that reflects a "true"
-hierarchical ordering: earlier variables define strata, and later variables
+hierarchical (i.e. stratified) ordering: earlier variables define strata, and later variables
 are only compared \strong{within} those strata (for example, by within-stratum
 frequency).
-
-For comparison, calling \code{\link[=smartrank]{smartrank()}} independently on each column and then
-using \code{order()} on multiple rank vectors implements a \strong{lexicographic}
-ordering, where each column is ranked globally. \code{rank_stratified()} instead
-performs \strong{stratified (within-group) ranking} across multiple variables.
 }
 \examples{
 library(rank)
@@ -117,16 +112,11 @@ data <- data.frame(
 # by pet frequency *within that gender*
 r <- rank_stratified(
   data,
-  cols    = c("gender", "pet"),
+  cols = c("gender", "pet"),
   sort_by = c("frequency", "frequency"),
-  desc    = TRUE
+  desc = TRUE
 )
 
 data[order(r), ]
-
-# Using with dplyr::arrange()
-# arrange(data, rank_stratified(cur_data(), cols = c("gender", "pet"),
-#                               sort_by = c("frequency", "frequency"),
-#                               desc = TRUE))
 
 }

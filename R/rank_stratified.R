@@ -1,7 +1,7 @@
 #' Stratified hierarchical ranking across multiple variables
 #'
 #' `rank_stratified()` computes a single, combined rank for each row of a
-#' data frame (or list of vectors) using **stratified hierarchical ranking**.
+#' data frame using **stratified hierarchical ranking**.
 #' The first variable is ranked globally; each subsequent variable is then
 #' ranked **within strata defined by all previous variables**.
 #'
@@ -11,16 +11,16 @@
 #' of `pet` **within that gender**, rather than globally.
 #'
 #' The result is a single rank vector that can be passed directly to
-#' [base::order()] or [dplyr::arrange()] to obtain a stratified, multi-level
+#' [base::order()] to obtain a stratified, multi-level
 #' ordering.
 #'
-#' @param x A data frame or list of equal-length vectors. Each selected column
+#' @param data A data frame. Each selected column
 #'   represents one level of the stratified hierarchy, in the order given by
 #'   `cols`.
-#' @param cols Optional column specification indicating which variables in `x`
+#' @param cols Optional column specification indicating which variables in `data`
 #'   to use for ranking, and in what order. Can be:
 #'   \itemize{
-#'     \item `NULL` (default): use all columns of `x` in their existing order.
+#'     \item `NULL` (default): use all columns of `data` in their existing order.
 #'     \item A character vector of column names.
 #'     \item An integer vector of column positions.
 #'   }
@@ -35,10 +35,11 @@
 #' @param ties.method Passed to [base::rank()] when resolving ties at each
 #'   level; must be one of `"average"`, `"first"`, `"last"`, `"random"`,
 #'   `"max"`, or `"min"`. See [base::rank()] for details.
-#' @param na.last Logical or `NA`, controlling the treatment of missing values,
+#' @param na.last Logical, controlling the treatment of missing values,
 #'   as in [base::rank()]. If `TRUE`, `NA`s are given the largest ranks; if
-#'   `FALSE`, the smallest; if `NA`, `NA`s are removed before ranking at each
-#'   level.
+#'   `FALSE`, the smallest. Unlike [base::rank()] or [smartrank()], `na.last`
+#'   cannot be set to `NA` in `rank_stratified()`, because dropping rows would
+#'   change group membership and break stratified ranking.
 #' @param verbose Logical; if `TRUE`, emit messages when `sort_by` is ignored
 #'   (e.g. for numeric columns), mirroring the behaviour of [smartrank()].
 #' @param freq_tiebreak Character scalar or vector controlling how
@@ -67,20 +68,13 @@
 #' }
 #'
 #' This yields a single composite rank per row that reflects a "true"
-#' hierarchical ordering: earlier variables define strata, and later variables
+#' hierarchical (i.e. stratified) ordering: earlier variables define strata, and later variables
 #' are only compared **within** those strata (for example, by within-stratum
 #' frequency).
 #'
-#' For comparison, calling [smartrank()] independently on each column and then
-#' using `order()` on multiple rank vectors implements a **lexicographic**
-#' ordering, where each column is ranked globally. `rank_stratified()` instead
-#' performs **stratified (within-group) ranking** across multiple variables.
-#'
 #' @return
-#' A numeric vector of length `nrow(x)` (or `length(x[[1]])` for lists),
-#' containing stratified ranks. Smaller values indicate "earlier" rows in the
-#' stratified hierarchy. The vector is suitable for use with [base::order()]
-#' or [dplyr::arrange()].
+#' A numeric vector of length `nrow(data)`, containing stratified ranks.
+#' Smaller values indicate "earlier" rows in the stratified hierarchy.
 #'
 #' @examples
 #' library(rank)
@@ -94,30 +88,65 @@
 #' # by pet frequency *within that gender*
 #' r <- rank_stratified(
 #'   data,
-#'   cols    = c("gender", "pet"),
+#'   cols = c("gender", "pet"),
 #'   sort_by = c("frequency", "frequency"),
-#'   desc    = TRUE
+#'   desc = TRUE
 #' )
 #'
 #' data[order(r), ]
 #'
-#' # Using with dplyr::arrange()
-#' # arrange(data, rank_stratified(cur_data(), cols = c("gender", "pet"),
-#' #                               sort_by = c("frequency", "frequency"),
-#' #                               desc = TRUE))
-#'
 #' @export
-rank_stratified <- function(data, sort_by = "frequency", desc = FALSE, ties.method = "average", na.last = TRUE, freq_tiebreak = "match_desc", verbose = TRUE){
+rank_stratified <- function(data, cols = NULL, sort_by = "frequency", desc = FALSE, ties.method = "average", na.last = TRUE, freq_tiebreak = "match_desc", verbose = TRUE){
 
   # Early assertions
-  if(!is.data.frame(data)) stop(sprintf("rank_stratified `data` argument must be a data.frame, not a [%s]", toString(class(data))))
+  if (!is.data.frame(data)) stop(sprintf("rank_stratified `data` argument must be a data.frame, not a [%s]", toString(class(data))))
+  if (!is.logical(na.last)) stop("`na.last` must be logical (TRUE/FALSE), or a logical vector recycled per column.")
+  if (anyNA(na.last)) stop("`na.last` must not contain NA; only TRUE or FALSE are supported in rank_stratified().")
+
+  # Subset & reorder data based on cols
+  if (!is.null(cols)) {
+
+    # 1. Reject zero-length cols
+    if (length(cols) == 0) {
+      stop("`cols` must contain at least one column name or position; use cols = NULL to rank all columns.")
+    }
+
+    # 2. Convert to column positions
+    if (is.character(cols)) {
+      missing <- setdiff(cols, colnames(data))
+      if (length(missing) > 0) {
+        stop(sprintf(
+          "All `cols` must be present in `data`. Missing: [%s]. Valid columns: [%s]",
+          toString(missing),
+          toString(colnames(data))
+        ))
+      }
+      cols_idx <- match(cols, colnames(data))
+
+    } else if (is.numeric(cols)) {
+
+      if (!all(cols %in% seq_len(ncol(data)))) {
+        stop("Numeric `cols` must be valid column positions in `data`.")
+      }
+      cols_idx <- cols
+
+    } else {
+      stop(sprintf(
+        "`cols` must be NULL, a character vector, or an integer vector, not [%s].",
+        toString(class(cols))
+      ))
+    }
+
+    # 3. Do the subsetting once, using validated column positions
+    data <- data[, cols_idx, drop = FALSE]
+  }
 
   ncols <- ncol(data)
 
-  desc <- if(length(desc) == 1) rep(desc, times = ncols) else desc
-  ties.method <- if(length(ties.method) == 1) rep(ties.method, times = ncols) else ties.method
-  na.last <- if(length(na.last) == 1) rep(na.last, times = ncols) else na.last
-  sort_by <- if(length(sort_by) == 1) rep(sort_by, times = ncols) else sort_by
+  desc <- if (length(desc) == 1) rep(desc, times = ncols) else desc
+  ties.method <- if (length(ties.method) == 1) rep(ties.method, times = ncols) else ties.method
+  na.last <- if (length(na.last) == 1) rep(na.last, times = ncols) else na.last
+  sort_by <- if (length(sort_by) == 1) rep(sort_by, times = ncols) else sort_by
   freq_tiebreak <- if (length(freq_tiebreak) == 1) rep(freq_tiebreak, times = ncols) else freq_tiebreak
 
   # Validate freq_tiebreak values per column
@@ -151,7 +180,7 @@ rank_stratified <- function(data, sort_by = "frequency", desc = FALSE, ties.meth
     curr_freq_tiebreak <- freq_tiebreak[colindex]
 
     # Get ranks taking previous column ranks into account
-    if(!is.null(prev_ranks)){
+    if (!is.null(prev_ranks)) {
       # 1. Compute within-group ranks using smartrank
       ls_values_by_prevrank <- split(curr_column, prev_ranks)
       ls_ranks <- lapply(
@@ -162,7 +191,7 @@ rank_stratified <- function(data, sort_by = "frequency", desc = FALSE, ties.meth
         ties.method = curr_ties.method,
         na.last = curr_na.last,
         freq_tiebreak = curr_freq_tiebreak,
-        verbose = FALSE
+        verbose = verbose
       )
 
       # 2. Rebuild a "within_ranks" vector in original row order
@@ -181,7 +210,7 @@ rank_stratified <- function(data, sort_by = "frequency", desc = FALSE, ties.meth
     else{
       ranks = smartrank(
         curr_column, sort_by = curr_sort_by, desc = curr_desc, ties.method = curr_ties.method,
-        na.last = curr_na.last, freq_tiebreak = curr_freq_tiebreak, verbose = FALSE
+        na.last = curr_na.last, freq_tiebreak = curr_freq_tiebreak, verbose = verbose
       )
     }
 

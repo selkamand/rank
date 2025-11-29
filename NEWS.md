@@ -8,7 +8,7 @@
 * Added a new hierarchical ranking function:
   - `rank_stratified()` performs **true stratified hierarchical ranking** across
     multiple variables. Each variable is ranked within groups defined by all
-    previous variables (unlike lexicographic ranking with `order()`).
+    previous variables.
 
 * Added two new functions for priority-based ranking:
   - `rank_by_priority()` assigns highest ranks to user-specified values (in the
