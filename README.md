@@ -213,4 +213,5 @@ arrange(
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See
+[CONTRIBUTING.md](https://github.com/selkamand/rank/blob/main/CONTRIBUTING.md).
