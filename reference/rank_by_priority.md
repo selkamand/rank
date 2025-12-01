@@ -36,9 +36,9 @@ A vector of ranks describing `x` such that `x[order(ranks)]` will move
 x <- c("A", "B", "C", "D", "E")
 rank_by_priority(x, c("C", "A"))
 #> [1] 2 4 1 4 4
-#> [1] "2" "4" "1" "4" "4"
+#> "2" "4" "1" "4" "4"
 
 rank_by_priority(1:6, c(4, 2, 7))
 #> [1] 4.5 2.0 4.5 1.0 4.5 4.5
-#> [1] 4 2 1 3 5 6
+#>  4 2 1 3 5 6
 ```
