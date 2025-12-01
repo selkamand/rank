@@ -126,3 +126,66 @@ test_that("rank_stratified recycles single sort_by/desc across columns", {
   expect_true(is.numeric(r))
   expect_length(r, nrow(data))
 })
+
+test_that("rank_stratified keeps ties when rows are identical across all columns", {
+  df <- data.frame(
+    g = c("A", "A", "A"),
+    x = c("x", "x", "x")
+  )
+
+  r <- rank_stratified(
+    df,
+    cols    = c("g", "x"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  # All rows identical -> all ranks should be identical
+  expect_equal(length(unique(r)), 1L)
+})
+
+test_that("rank_stratified keeps ties within strata when later columns add no information", {
+  df <- data.frame(
+    group = c("A", "A", "B", "B"),
+    value = c("x", "x", "y", "y")
+  )
+
+  r <- rank_stratified(
+    df,
+    cols    = c("group", "value"),
+    sort_by = c("alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE)
+  )
+
+  ord <- order(r)
+
+  # Rows 1 and 2 (group A, value x) should have the same rank
+  expect_equal(
+    unique(r[ord][df$group[ord] == "A"]),
+    r[ord][df$group[ord] == "A"][1]
+  )
+
+  # Rows 3 and 4 (group B, value y) should have the same rank
+  expect_equal(
+    unique(r[ord][df$group[ord] == "B"]),
+    r[ord][df$group[ord] == "B"][1]
+  )
+})
+
+test_that("rank_stratified with multiple columns can still produce ties overall", {
+  df <- data.frame(
+    g  = c("A", "A", "B", "B"),
+    x1 = c("x", "x", "y", "y"),
+    x2 = c("z", "z", "w", "w")
+  )
+
+  r <- rank_stratified(
+    df,
+    cols    = c("g", "x1", "x2"),
+    sort_by = c("alphabetical", "alphabetical", "alphabetical"),
+    desc    = c(FALSE, FALSE, FALSE)
+  )
+
+  # There should be at least some duplicated ranks
+  expect_true(anyDuplicated(r) > 0)
+})

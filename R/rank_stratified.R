@@ -202,10 +202,11 @@ rank_stratified <- function(data, cols = NULL, sort_by = "frequency", desc = FAL
         within_ranks[idx] <- ls_ranks[[group_name]]
       }
 
+
       # 3. Combine prev_ranks and within_ranks into a new global rank
-      ord <- order(prev_ranks, within_ranks, na.last = TRUE)
-      ranks <- integer(length(prev_ranks))
-      ranks[ord] <- seq_along(ord)
+      # where within_ranks only
+      combined_ranks <- combine_ranks(prev_ranks, within_ranks)
+      ranks <- rank(combined_ranks, na.last = curr_na.last, ties.method = curr_ties.method)
     }
     else{
       ranks = smartrank(
@@ -223,3 +224,44 @@ rank_stratified <- function(data, cols = NULL, sort_by = "frequency", desc = FAL
 
   return(ranks)
 }
+
+# Combine ranks using a base-shifting approach. Not used because
+# of possible errors when ranking large numbers of independent variables
+# combine_ranks_baseshift <- function(prev_ranks, curr_ranks){
+#   maximum <- max(curr_ranks, na.rm = TRUE)
+#   minimum <- min(curr_ranks, na.rm = TRUE)
+#   range = maximum-minimum + 1
+#   return(prev_ranks * range + curr_ranks)
+# }
+
+
+combine_ranks <- function(prev_ranks, curr_ranks) {
+
+  n <- length(prev_ranks)
+  if (n == 0L) return(numeric(0))
+
+  # 1. Order by prev, then curr (hierarchical comparison)
+  ord <- order(prev_ranks, curr_ranks)
+  prev_sorted <- prev_ranks[ord]
+  curr_sorted <- curr_ranks[ord]
+
+  # 2. Detect when the (prev, curr) pair changes (with tolerance)
+  is_new_group <- logical(n)
+  is_new_group[1L] <- TRUE
+
+  for (i in 2L:n) {
+
+    # new group if either prev or curr changed "meaningfully"
+
+    is_new_group[i] <- (prev_sorted[i] != prev_sorted[i - 1L]) || (curr_sorted[i] != curr_sorted[i - 1L])
+  }
+
+  # 3. Cumulative groups -> ranks
+  rank_sorted <- cumsum(is_new_group)
+
+  # 4. Put back in original row order
+  out <- numeric(n)
+  out[ord] <- rank_sorted
+  out
+}
+
