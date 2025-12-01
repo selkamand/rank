@@ -11,10 +11,10 @@
 #' @examples
 #' x <- c("A", "B", "C", "D", "E")
 #' rank_by_priority(x, c("C", "A"))
-#' #> [1] "2" "4" "1" "4" "4"
+#' #> "2" "4" "1" "4" "4"
 #'
 #' rank_by_priority(1:6, c(4, 2, 7))
-#' #> [1] 4 2 1 3 5 6
+#' #>  4 2 1 3 5 6
 #'
 #' @export
 rank_by_priority <- function(x, priority_values, ties.method = "average") {
