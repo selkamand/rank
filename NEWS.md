@@ -1,4 +1,4 @@
-# rank (development version)
+# rank 0.2.0
 
 * Enhanced `smartrank()`:
   - Added the `freq_tiebreak` argument with options `"match_desc"`, `"asc"`,
