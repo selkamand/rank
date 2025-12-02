@@ -1,3 +1,5 @@
+# rank (development version)
+
 # rank 0.2.0
 
 * Enhanced `smartrank()`:
