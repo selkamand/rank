@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/selkamand/rank/blob/main/DESCRIPTION)
 
 El-Kamand S (2025). *rank: Customisable Ranking of Numerical and
-Categorical Data*. R package version 0.1.1.9000,
+Categorical Data*. R package version 0.2.0,
 <https://github.com/selkamand/rank>.
 
     @Manual{,
       title = {rank: Customisable Ranking of Numerical and Categorical Data},
       author = {Sam El-Kamand},
       year = {2025},
-      note = {R package version 0.1.1.9000},
+      note = {R package version 0.2.0},
       url = {https://github.com/selkamand/rank},
     }

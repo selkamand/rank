@@ -1,6 +1,8 @@
 # Changelog
 
-## rank (development version)
+## rank 0.2.0
+
+CRAN release: 2025-12-01
 
 - Enhanced
   [`smartrank()`](https://selkamand.github.io/rank/reference/smartrank.md):
