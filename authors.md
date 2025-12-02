@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/selkamand/rank/blob/v0.2.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/selkamand/rank/blob/main/DESCRIPTION)
 
 El-Kamand S (2025). *rank: Customisable Ranking of Numerical and
-Categorical Data*. R package version 0.2.0,
+Categorical Data*. R package version 0.2.0.9000,
 <https://github.com/selkamand/rank>.
 
     @Manual{,
       title = {rank: Customisable Ranking of Numerical and Categorical Data},
       author = {Sam El-Kamand},
       year = {2025},
-      note = {R package version 0.2.0},
+      note = {R package version 0.2.0.9000},
       url = {https://github.com/selkamand/rank},
     }

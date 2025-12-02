@@ -1,5 +1,7 @@
 # Changelog
 
+## rank (development version)
+
 ## rank 0.2.0
 
 CRAN release: 2025-12-01
