@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/selkamand/rank/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/selkamand/rank/blob/v0.2.0/DESCRIPTION)
 
 El-Kamand S (2025). *rank: Customisable Ranking of Numerical and
 Categorical Data*. R package version 0.2.0,
